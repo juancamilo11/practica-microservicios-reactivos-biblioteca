@@ -16,7 +16,7 @@ import javax.validation.constraints.Null;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class UserDto {
-    @Null
+    @NotBlank
     private String id;
     @NotBlank
     private String firstName;
