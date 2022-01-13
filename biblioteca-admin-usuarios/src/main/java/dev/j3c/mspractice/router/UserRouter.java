@@ -3,6 +3,7 @@ package dev.j3c.mspractice.router;
 import com.google.gson.Gson;
 import dev.j3c.mspractice.dto.UserDto;
 import dev.j3c.mspractice.usecases.AddUserUsecase;
+import dev.j3c.mspractice.usecases.GetAllUsersUsecase;
 import dev.j3c.mspractice.usecases.GetUserByIdUsecase;
 import jdk.jfr.ContentType;
 import lombok.extern.java.Log;
@@ -16,6 +17,7 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+import javax.print.attribute.standard.Media;
 import java.util.function.Function;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
@@ -48,5 +50,15 @@ public class UserRouter {
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromPublisher(getUserByIdUsecase.apply(request.pathVariable("id")),UserDto.class)));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> getAllUsers(GetAllUsersUsecase getAllUsersUsecase) {
+        return route(GET("/get-users")
+                .and(accept(MediaType.APPLICATION_JSON)), request ->
+                ServerResponse
+                        .ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(getAllUsersUsecase.get(),UserDto.class)));
     }
 }
