@@ -3,10 +3,7 @@ package dev.j3c.mspractice.router;
 import com.google.gson.Gson;
 import com.mongodb.internal.connection.Server;
 import dev.j3c.mspractice.dto.UserDto;
-import dev.j3c.mspractice.usecases.AddUserUsecase;
-import dev.j3c.mspractice.usecases.GetAllUsersUsecase;
-import dev.j3c.mspractice.usecases.GetUserByIdUsecase;
-import dev.j3c.mspractice.usecases.UpdateUserByIdUsecase;
+import dev.j3c.mspractice.usecases.*;
 import jdk.jfr.ContentType;
 import lombok.extern.java.Log;
 import org.slf4j.Logger;
@@ -77,5 +74,14 @@ public class UserRouter {
                 .and(accept(MediaType.APPLICATION_JSON)), request -> request
                 .bodyToMono(UserDto.class)
                 .flatMap(executor));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> deleteUserById(DeleteUserByIdUsecase deleteUserByIdUsecase) {
+        return route(DELETE("/delete-user/{id}")
+                .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromPublisher(deleteUserByIdUsecase.accept(request.pathVariable("id")),Void.class)));
     }
 }
