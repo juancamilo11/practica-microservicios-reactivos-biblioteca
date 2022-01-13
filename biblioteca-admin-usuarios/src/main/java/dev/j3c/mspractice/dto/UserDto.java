@@ -22,8 +22,9 @@ public class UserDto {
     private String firstName;
     @NotBlank
     private String lastName;
+    @NotNull
     @Min(value = 1)
     private Long age;
     @NotNull
-    private ContactDataDto contactData;
+    private ContactDataDto contactDataDto;
 }

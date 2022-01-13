@@ -5,7 +5,6 @@ import dev.j3c.mspractice.collection.helpers.ContactData;
 import dev.j3c.mspractice.dto.UserDto;
 import dev.j3c.mspractice.dto.helpers.ContactDataDto;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.function.Function;
@@ -23,13 +22,13 @@ public class UserMapper {
                 .contactData(ContactData
                         .builder()
                         .address(userDto
-                                .getContactData()
+                                .getContactDataDto()
                                 .getAddress())
                         .email(userDto
-                                .getContactData()
+                                .getContactDataDto()
                                 .getEmail())
                         .phoneNumber(userDto
-                                .getContactData()
+                                .getContactDataDto()
                                 .getPhoneNumber())
                         .build())
                 .build();
@@ -41,7 +40,7 @@ public class UserMapper {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .age(user.getAge())
-                .contactData(ContactDataDto
+                .contactDataDto(ContactDataDto
                         .builder()
                         .address(user
                                 .getContactData()
