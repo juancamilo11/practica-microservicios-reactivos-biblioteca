@@ -23,12 +23,16 @@ public class AddUserUsecase implements AddUser {
 
     @Override
     public Mono<UserDto> apply(UserDto userDto) {
-        return userRepository
-                .save(mapper
-                        .mapFromDtoToEntity()
-                        .apply(userDto))
-                .map(user -> mapper
-                        .mapFromEntityToDto()
-                        .apply(user));
+        final String email = userDto.getContactDataDto().getEmail();
+        return userRepository.existsByContactData_Email(email)
+                .flatMap(result -> Boolean.TRUE.equals(result) ?
+                        Mono.error(new IllegalArgumentException("Error, el email " + email + " ya se encuentra registrado, intente con otro.")) :
+                        userRepository
+                                .save(mapper
+                                        .mapFromDtoToEntity()
+                                        .apply(userDto))
+                                .map(user -> mapper
+                                        .mapFromEntityToDto()
+                                        .apply(user)));
     }
 }

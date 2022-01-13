@@ -43,7 +43,7 @@ public class UserRouter {
 
     @Bean
     public RouterFunction<ServerResponse> getUserByIdRoute(GetUserByIdUsecase getUserByIdUsecase) {
-        return route(GET("/get-user/${id}")
+        return route(GET("/get-user/{id}")
                 .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
