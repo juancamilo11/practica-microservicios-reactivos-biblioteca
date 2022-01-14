@@ -1,4 +1,4 @@
-package dev.j3c.mspractice.router;
+package dev.j3c.mspractice.repository.router;
 
 import dev.j3c.mspractice.dto.StockInvoiceDto;
 import dev.j3c.mspractice.usecases.GetAllStockInvoicesUsecase;

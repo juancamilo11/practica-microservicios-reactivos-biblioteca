@@ -15,10 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-@Document
 public class StockInvoice {
-    @Id
-    private String id;
     private LocalDate date;
     private List<LibraryItem> itemsList;
     private double totalPrice;
