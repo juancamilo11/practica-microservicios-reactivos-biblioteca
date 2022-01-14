@@ -16,4 +16,8 @@ public enum EnumItemFormatDto {
     public String getType() {
         return type;
     }
+
+    public EnumItemFormatDto getEnumByStringType(String type) {
+        return EnumItemFormatDto.valueOf(type);
+    }
 }

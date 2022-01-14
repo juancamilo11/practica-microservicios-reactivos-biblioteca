@@ -54,10 +54,4 @@ public class UserMapper {
                         .build())
                 .build();
     }
-
-        public Function<List<User>, List<UserDto>> mapFromEntityListToDtoList() {
-            return (List<User> userList) -> userList.stream().map(user -> mapFromEntityToDto().apply(user)).collect(Collectors.toList());
-        }
-
-
 }
