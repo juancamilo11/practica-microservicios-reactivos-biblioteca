@@ -1,25 +1,24 @@
 package dev.j3c.mspractice.mapper;
 
-import dev.j3c.mspractice.collection.InvoiceNewStock;
+import dev.j3c.mspractice.collection.StockInvoice;
 import dev.j3c.mspractice.collection.helpers.EnumItemFormat;
 import dev.j3c.mspractice.collection.helpers.LibraryItem;
-import dev.j3c.mspractice.dto.InvoiceNewStockDto;
+import dev.j3c.mspractice.dto.StockInvoiceDto;
 import dev.j3c.mspractice.dto.helpers.EnumItemFormatDto;
 import dev.j3c.mspractice.dto.helpers.LibraryItemDto;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
 public class InvoiceStockMapper {
 
-    public Function<InvoiceNewStockDto, InvoiceNewStock> mapFromDtoToEntity() {
-        return (InvoiceNewStockDto invoiceNewStockDto) -> InvoiceNewStock.builder()
-                .id(invoiceNewStockDto.getId())
-                .date(invoiceNewStockDto.getDate())
-                .itemsList(invoiceNewStockDto.getItemsList()
+    public Function<StockInvoiceDto, StockInvoice> mapFromDtoToEntity() {
+        return (StockInvoiceDto stockInvoiceDto) -> StockInvoice.builder()
+                .id(stockInvoiceDto.getId())
+                .date(stockInvoiceDto.getDate())
+                .itemsList(stockInvoiceDto.getItemsList()
                         .stream()
                         .map(libraryItemDto -> LibraryItem
                                 .builder()
@@ -31,14 +30,14 @@ public class InvoiceStockMapper {
                                 .purchasePrice(libraryItemDto.getPurchasePrice())
                                 .build())
                         .collect(Collectors.toList()))
-                .totalPrice(invoiceNewStockDto.getTotalPrice()).build();
+                .totalPrice(stockInvoiceDto.getTotalPrice()).build();
     }
 
-    public Function<InvoiceNewStock, InvoiceNewStockDto> mapFromEntityToDto() {
-        return (InvoiceNewStock invoiceNewStock) -> InvoiceNewStockDto.builder()
-                .id(invoiceNewStock.getId())
-                .date(invoiceNewStock.getDate())
-                .itemsList(invoiceNewStock.getItemsList()
+    public Function<StockInvoice, StockInvoiceDto> mapFromEntityToDto() {
+        return (StockInvoice stockInvoice) -> StockInvoiceDto.builder()
+                .id(stockInvoice.getId())
+                .date(stockInvoice.getDate())
+                .itemsList(stockInvoice.getItemsList()
                         .stream()
                         .map(libraryItem -> LibraryItemDto
                                 .builder()
@@ -50,6 +49,6 @@ public class InvoiceStockMapper {
                                 .purchasePrice(libraryItem.getPurchasePrice())
                                 .build())
                         .collect(Collectors.toList()))
-                .totalPrice(invoiceNewStock.getTotalPrice()).build();
+                .totalPrice(stockInvoice.getTotalPrice()).build();
     }
 }

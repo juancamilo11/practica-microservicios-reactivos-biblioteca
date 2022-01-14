@@ -1,6 +1,6 @@
-package dev.j3c.mspractice.dto;
+package dev.j3c.mspractice.collection;
 
-import dev.j3c.mspractice.dto.helpers.LibraryItemDto;
+import dev.j3c.mspractice.collection.helpers.LibraryItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -16,13 +15,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class InvoiceNewStockDto {
-    @NotBlank
+@Document
+public class StockInvoice {
+    @Id
     private String id;
-    @NotNull
     private LocalDate date;
-    @NotEmpty
-    private List<LibraryItemDto> itemsList;
-    @Null
+    private List<LibraryItem> itemsList;
     private double totalPrice;
 }
