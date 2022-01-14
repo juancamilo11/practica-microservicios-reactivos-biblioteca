@@ -1,6 +1,7 @@
 package dev.j3c.mspractice.router;
 
 import dev.j3c.mspractice.dto.StockInvoiceDto;
+import dev.j3c.mspractice.usecases.GetAllStockInvoicesUsecase;
 import dev.j3c.mspractice.usecases.GetStockInvoiceByIdUsecase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,16 @@ public class StockInvoiceRouter {
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromPublisher(getStockInvoiceByIdUsecase.apply(request.pathVariable("id")), StockInvoiceDto.class)));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> getAllStockInvoicesRoute(GetAllStockInvoicesUsecase getAllUsersUsecase) {
+        return route(GET("/get-all-stock-invoices")
+                .and(accept(MediaType.APPLICATION_JSON)), request ->
+                ServerResponse
+                        .ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(getAllUsersUsecase.get(),StockInvoiceDto.class)));
     }
 
 }

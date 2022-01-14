@@ -5,7 +5,7 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface InvoiceNewStockRepository extends ReactiveCrudRepository<StockInvoice, String> {
+public interface StockInvoicesRepository extends ReactiveCrudRepository<StockInvoice, String> {
 
 }
 

@@ -12,7 +12,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
-public class InvoiceStockMapper {
+public class StockInvoiceMapper {
 
     public Function<StockInvoiceDto, StockInvoice> mapFromDtoToEntity() {
         return (StockInvoiceDto stockInvoiceDto) -> StockInvoice.builder()
