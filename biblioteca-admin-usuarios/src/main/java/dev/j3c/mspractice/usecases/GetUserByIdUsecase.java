@@ -27,7 +27,7 @@ public class GetUserByIdUsecase implements GetUserById {
     public Mono<UserDto> apply(String id) {
         return userRepository
                 .findById(id)
-                .switchIfEmpty(Mono.just(User.builder().build()))
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("Error, el usuario con id " + id + " no está registrado en el sistema.")))
                 .map(user -> userMapper
                         .mapFromEntityToDto()
                         .apply(user));

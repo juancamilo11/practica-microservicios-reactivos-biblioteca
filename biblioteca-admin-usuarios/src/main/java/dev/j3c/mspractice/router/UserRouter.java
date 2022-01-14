@@ -1,11 +1,7 @@
 package dev.j3c.mspractice.router;
 
-import com.google.gson.Gson;
-import com.mongodb.internal.connection.Server;
 import dev.j3c.mspractice.dto.UserDto;
 import dev.j3c.mspractice.usecases.*;
-import jdk.jfr.ContentType;
-import lombok.extern.java.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -16,8 +12,6 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
-import javax.print.attribute.standard.Media;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
