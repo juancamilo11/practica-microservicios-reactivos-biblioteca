@@ -1,30 +1,20 @@
 package dev.j3c.mspractice.usecases;
 
-import dev.j3c.mspractice.collection.PurchaseStockInvoice;
-import dev.j3c.mspractice.collection.SellStockInvoice;
-import dev.j3c.mspractice.dto.PurchaseStockInvoiceDto;
 import dev.j3c.mspractice.dto.StockInvoiceDto;
 import dev.j3c.mspractice.mapper.PurchaseInvoiceMapper;
 import dev.j3c.mspractice.mapper.SellInvoiceMapper;
 import dev.j3c.mspractice.repository.PurchaseStockInvoiceRepository;
 import dev.j3c.mspractice.repository.SellStockInvoiceRepository;
 import dev.j3c.mspractice.usecases.interfaces.GetStockInvoicesBetweenDates;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
 
 @Service
 @Validated
-
 public class GetStockInvoicesBetweenDatesUsecase implements GetStockInvoicesBetweenDates {
     private final PurchaseStockInvoiceRepository purchaseInvoiceRepository;
     private final SellStockInvoiceRepository sellStockInvoiceRepository;

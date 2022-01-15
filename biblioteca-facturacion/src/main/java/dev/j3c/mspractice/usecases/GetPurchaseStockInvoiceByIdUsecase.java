@@ -1,7 +1,6 @@
 package dev.j3c.mspractice.usecases;
 
 import dev.j3c.mspractice.dto.PurchaseStockInvoiceDto;
-import dev.j3c.mspractice.dto.StockInvoiceDto;
 import dev.j3c.mspractice.mapper.PurchaseInvoiceMapper;
 import dev.j3c.mspractice.repository.PurchaseStockInvoiceRepository;
 import dev.j3c.mspractice.usecases.interfaces.GetPurchaseStockInvoiceById;

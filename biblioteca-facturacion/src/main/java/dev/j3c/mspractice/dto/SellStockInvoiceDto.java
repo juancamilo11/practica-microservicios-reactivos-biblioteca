@@ -1,7 +1,10 @@
 package dev.j3c.mspractice.dto;
 
 import dev.j3c.mspractice.dto.helpers.LibraryItemDto;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotBlank;
