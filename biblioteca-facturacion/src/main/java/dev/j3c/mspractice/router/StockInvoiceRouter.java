@@ -1,8 +1,8 @@
-package dev.j3c.mspractice.repository.router;
+package dev.j3c.mspractice.router;
 
 import dev.j3c.mspractice.dto.StockInvoiceDto;
-import dev.j3c.mspractice.usecases.GetAllStockInvoicesUsecase;
-import dev.j3c.mspractice.usecases.GetStockInvoiceByIdUsecase;
+import dev.j3c.mspractice.usecases.GetAllPurchasePurchaseStockInvoicesUsecase;
+import dev.j3c.mspractice.usecases.GetPurchaseStockInvoiceByIdUsecase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -18,16 +18,16 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 public class StockInvoiceRouter {
 
     @Bean
-    public RouterFunction<ServerResponse> getStockInvoiceByIdRoute(GetStockInvoiceByIdUsecase getStockInvoiceByIdUsecase) {
+    public RouterFunction<ServerResponse> getStockInvoiceByIdRoute(GetPurchaseStockInvoiceByIdUsecase getPurchaseStockInvoiceByIdUsecase) {
         return route(GET("/get-invoice/{id}")
                 .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromPublisher(getStockInvoiceByIdUsecase.apply(request.pathVariable("id")), StockInvoiceDto.class)));
+                .body(BodyInserters.fromPublisher(getPurchaseStockInvoiceByIdUsecase.apply(request.pathVariable("id")), StockInvoiceDto.class)));
     }
 
     @Bean
-    public RouterFunction<ServerResponse> getAllStockInvoicesRoute(GetAllStockInvoicesUsecase getAllUsersUsecase) {
+    public RouterFunction<ServerResponse> getAllStockInvoicesRoute(GetAllPurchasePurchaseStockInvoicesUsecase getAllUsersUsecase) {
         return route(GET("/get-all-stock-invoices")
                 .and(accept(MediaType.APPLICATION_JSON)), request ->
                 ServerResponse

@@ -2,8 +2,8 @@ package dev.j3c.mspractice.usecases;
 
 import dev.j3c.mspractice.dto.StockInvoiceDto;
 import dev.j3c.mspractice.mapper.StockInvoiceMapper;
-import dev.j3c.mspractice.repository.StockInvoicesRepository;
-import dev.j3c.mspractice.usecases.interfaces.GetStockInvoiceById;
+import dev.j3c.mspractice.repository.PurchaseStockInvoiceRepository;
+import dev.j3c.mspractice.usecases.interfaces.GetPurchaseStockInvoiceById;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -11,13 +11,13 @@ import reactor.core.publisher.Mono;
 
 @Service
 @Validated
-public class GetStockInvoiceByIdUsecase implements GetStockInvoiceById {
+public class GetPurchaseStockInvoiceByIdUsecase implements GetPurchaseStockInvoiceById {
 
-    private StockInvoicesRepository invoicesRepository;
+    private PurchaseStockInvoiceRepository invoicesRepository;
     private StockInvoiceMapper stockInvoiceMapper;
 
     @Autowired
-    public GetStockInvoiceByIdUsecase(StockInvoicesRepository invoicesRepository, StockInvoiceMapper stockInvoiceMapper) {
+    public GetPurchaseStockInvoiceByIdUsecase(PurchaseStockInvoiceRepository invoicesRepository, StockInvoiceMapper stockInvoiceMapper) {
         this.invoicesRepository = invoicesRepository;
         this.stockInvoiceMapper = stockInvoiceMapper;
     }
