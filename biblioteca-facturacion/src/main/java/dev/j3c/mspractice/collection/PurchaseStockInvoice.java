@@ -1,13 +1,15 @@
 package dev.j3c.mspractice.collection;
 
+import dev.j3c.mspractice.collection.helpers.LibraryItem;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
 @Document
 public class PurchaseStockInvoice extends StockInvoice {
@@ -15,4 +17,12 @@ public class PurchaseStockInvoice extends StockInvoice {
     private String id;
     private String nit;
     private String providerName;
+
+    @Builder
+    public PurchaseStockInvoice(LocalDate date, List<LibraryItem> itemsList, double totalPrice, String id, String nit, String providerName) {
+        super(date, itemsList, totalPrice);
+        this.id = id;
+        this.nit = nit;
+        this.providerName = providerName;
+    }
 }

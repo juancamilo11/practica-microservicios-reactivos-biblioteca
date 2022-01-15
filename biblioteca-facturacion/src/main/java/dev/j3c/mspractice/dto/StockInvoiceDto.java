@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class StockInvoiceDto {
+public abstract class StockInvoiceDto {
     @NotBlank
     private String id;
     @NotNull
