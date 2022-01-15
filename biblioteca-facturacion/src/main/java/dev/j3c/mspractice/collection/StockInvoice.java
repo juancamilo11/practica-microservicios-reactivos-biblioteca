@@ -12,8 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder(toBuilder = true)
-public abstract class StockInvoice {
+public class StockInvoice {
     private LocalDate date;
     private List<LibraryItem> itemsList;
     private double totalPrice;

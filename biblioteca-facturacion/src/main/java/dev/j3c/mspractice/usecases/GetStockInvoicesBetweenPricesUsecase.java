@@ -1,4 +1,45 @@
 package dev.j3c.mspractice.usecases;
 
-public class GetStockInvoicesBetweenPricesUsecase {
+import dev.j3c.mspractice.dto.StockInvoiceDto;
+import dev.j3c.mspractice.mapper.PurchaseInvoiceMapper;
+import dev.j3c.mspractice.mapper.SellInvoiceMapper;
+import dev.j3c.mspractice.repository.PurchaseStockInvoiceRepository;
+import dev.j3c.mspractice.repository.SellStockInvoiceRepository;
+import dev.j3c.mspractice.usecases.interfaces.GetStockInvoicesBetweenPrices;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+import reactor.core.publisher.Flux;
+
+import java.time.LocalDate;
+
+@Service
+@Validated
+public class GetStockInvoicesBetweenPricesUsecase implements GetStockInvoicesBetweenPrices {
+    private final PurchaseStockInvoiceRepository purchaseInvoiceRepository;
+    private final SellStockInvoiceRepository sellStockInvoiceRepository;
+    private final PurchaseInvoiceMapper purchaseInvoiceMapper;
+    private final SellInvoiceMapper sellInvoiceMapper;
+
+    @Autowired
+    public GetStockInvoicesBetweenPricesUsecase(PurchaseStockInvoiceRepository purchaseInvoiceRepository, SellStockInvoiceRepository sellStockInvoiceRepository, PurchaseInvoiceMapper purchaseInvoiceMapper, SellInvoiceMapper sellInvoiceMapper) {
+        this.purchaseInvoiceRepository = purchaseInvoiceRepository;
+        this.sellStockInvoiceRepository = sellStockInvoiceRepository;
+        this.purchaseInvoiceMapper = purchaseInvoiceMapper;
+        this.sellInvoiceMapper = sellInvoiceMapper;
+    }
+
+    @Override
+    public Flux<StockInvoiceDto> apply(double minPrice, double maxPrice) {
+        return Flux.concat(purchaseInvoiceRepository
+                        .findAllByTotalPriceBetween(minPrice, maxPrice)
+                        .map(invoice -> purchaseInvoiceMapper
+                                .mapFromEntityToDto()
+                                .apply(invoice)),
+                sellStockInvoiceRepository
+                        .findAllByTotalPriceBetween(minPrice, maxPrice)
+                        .map(invoice -> sellInvoiceMapper
+                                .mapFromEntityToDto()
+                                .apply(invoice)));
+    }
 }

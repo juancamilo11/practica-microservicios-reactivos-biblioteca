@@ -3,16 +3,15 @@ package dev.j3c.mspractice.router;
 import dev.j3c.mspractice.dto.PurchaseStockInvoiceDto;
 import dev.j3c.mspractice.dto.SellStockInvoiceDto;
 import dev.j3c.mspractice.dto.StockInvoiceDto;
-import dev.j3c.mspractice.usecases.GetAllPurchasePurchaseStockInvoicesUsecase;
-import dev.j3c.mspractice.usecases.GetAllSellStockInvoicesUsecase;
-import dev.j3c.mspractice.usecases.GetPurchaseStockInvoiceByIdUsecase;
-import dev.j3c.mspractice.usecases.GetSellStockInvoiceByIdUsecase;
+import dev.j3c.mspractice.usecases.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
+
+import java.time.LocalDate;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
@@ -57,6 +56,34 @@ public class StockInvoiceRouter {
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromPublisher(getSellStockInvoiceByIdUsecase.apply(request.pathVariable("id")), SellStockInvoiceDto.class)));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> getAllStockInvoicesBetweenDatesRoute(GetStockInvoicesBetweenDatesUsecase getStockInvoicesBetweenDatesUsecase) {
+        return route(GET("/get-puchase-stock-invoices/{since}/{until}")
+                .and(accept(MediaType.APPLICATION_JSON)), request ->
+                ServerResponse
+                        .ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters
+                                .fromPublisher(getStockInvoicesBetweenDatesUsecase
+                                        .apply(LocalDate.parse(request.pathVariable("since")),
+                                               LocalDate.parse(request.pathVariable("until"))),
+                                        StockInvoiceDto.class)));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> getAllStockInvoicesBetweenPricesRoute(GetStockInvoicesBetweenPricesUsecase getStockInvoicesBetweenPricesUsecase) {
+        return route(GET("/get-puchase-stock-invoices/{minPrice}/{maxPrice}")
+                .and(accept(MediaType.APPLICATION_JSON)), request ->
+                ServerResponse
+                        .ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters
+                                .fromPublisher(getStockInvoicesBetweenPricesUsecase
+                                                .apply(Double.parseDouble(request.pathVariable("minPrice")),
+                                                        Double.parseDouble(request.pathVariable("maxPrice"))),
+                                        StockInvoiceDto.class)));
     }
 
 }

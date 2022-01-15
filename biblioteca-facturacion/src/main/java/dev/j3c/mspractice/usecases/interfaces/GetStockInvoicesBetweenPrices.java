@@ -5,5 +5,6 @@ import reactor.core.publisher.Flux;
 
 @FunctionalInterface
 public interface GetStockInvoicesBetweenPrices {
-    Flux<StockInvoiceDto> get();
+    Flux<StockInvoiceDto> apply(double minPrice, double maxPrice);
+
 }
