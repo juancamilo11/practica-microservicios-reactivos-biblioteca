@@ -51,5 +51,4 @@ public class SellInvoiceMapper {
                         .collect(Collectors.toList()))
                 .totalPrice(sellStockInvoice.getTotalPrice()).build();
     }
-
 }

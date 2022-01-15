@@ -17,23 +17,23 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @Configuration
 public class StockInvoiceRouter {
 
-    @Bean
-    public RouterFunction<ServerResponse> getStockInvoiceByIdRoute(GetPurchaseStockInvoiceByIdUsecase getPurchaseStockInvoiceByIdUsecase) {
-        return route(GET("/get-invoice/{id}")
-                .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromPublisher(getPurchaseStockInvoiceByIdUsecase.apply(request.pathVariable("id")), StockInvoiceDto.class)));
-    }
-
-    @Bean
-    public RouterFunction<ServerResponse> getAllStockInvoicesRoute(GetAllPurchasePurchaseStockInvoicesUsecase getAllUsersUsecase) {
-        return route(GET("/get-all-stock-invoices")
-                .and(accept(MediaType.APPLICATION_JSON)), request ->
-                ServerResponse
-                        .ok()
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .body(BodyInserters.fromPublisher(getAllUsersUsecase.get(),StockInvoiceDto.class)));
-    }
+//    @Bean
+//    public RouterFunction<ServerResponse> getStockInvoiceByIdRoute(GetPurchaseStockInvoiceByIdUsecase getPurchaseStockInvoiceByIdUsecase) {
+//        return route(GET("/get-invoice/{id}")
+//                .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
+//                .ok()
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .body(BodyInserters.fromPublisher(getPurchaseStockInvoiceByIdUsecase.apply(request.pathVariable("id")), StockInvoiceDto.class)));
+//    }
+//
+//    @Bean
+//    public RouterFunction<ServerResponse> getAllStockInvoicesRoute(GetAllPurchasePurchaseStockInvoicesUsecase getAllUsersUsecase) {
+//        return route(GET("/get-all-stock-invoices")
+//                .and(accept(MediaType.APPLICATION_JSON)), request ->
+//                ServerResponse
+//                        .ok()
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .body(BodyInserters.fromPublisher(getAllUsersUsecase.get(),StockInvoiceDto.class)));
+//    }
 
 }
