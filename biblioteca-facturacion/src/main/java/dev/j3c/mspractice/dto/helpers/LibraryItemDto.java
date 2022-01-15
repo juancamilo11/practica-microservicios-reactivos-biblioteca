@@ -32,8 +32,8 @@ public class LibraryItemDto {
     }
 
     private void validateItemFormat(String format) throws IllegalArgumentException {
-        if(EnumItemFormatDto.enumValueIsValid(format)) {
-            throw new IllegalArgumentException("");
+        if(!EnumItemFormatDto.enumValueIsValid(format)) {
+            throw new IllegalArgumentException("El tipo de formato del recurso no es válido");
         }
     }
 }

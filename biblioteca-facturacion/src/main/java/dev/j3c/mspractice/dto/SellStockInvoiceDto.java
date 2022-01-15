@@ -19,13 +19,13 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Document
 public class SellStockInvoiceDto extends StockInvoiceDto {
-    private String clientId;
-    private String providerName;
+    private String customerId;
+    private String customerName;
 
     @Builder
-    public SellStockInvoiceDto(@NotBlank String id, @NotNull LocalDate date, @NotEmpty List<LibraryItemDto> itemsList, @Null double totalPrice, String clientId, String providerName) {
+    public SellStockInvoiceDto(@NotBlank String id, @NotNull LocalDate date, @NotEmpty List<LibraryItemDto> itemsList, double totalPrice, String customerId, String customerName) {
         super(id, date, itemsList, totalPrice);
-        this.clientId = clientId;
-        this.providerName = providerName;
+        this.customerId = customerId;
+        this.customerName = customerName;
     }
 }
