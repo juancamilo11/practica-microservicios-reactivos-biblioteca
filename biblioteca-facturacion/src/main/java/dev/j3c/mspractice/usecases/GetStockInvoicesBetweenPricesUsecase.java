@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Flux;
 
-import java.time.LocalDate;
-
 @Service
 @Validated
 public class GetStockInvoicesBetweenPricesUsecase implements GetStockInvoicesBetweenPrices {

@@ -1,10 +1,8 @@
 package dev.j3c.mspractice.mapper;
 
 import dev.j3c.mspractice.collection.SellStockInvoice;
-import dev.j3c.mspractice.collection.helpers.EnumItemFormat;
 import dev.j3c.mspractice.collection.helpers.LibraryItem;
 import dev.j3c.mspractice.dto.SellStockInvoiceDto;
-import dev.j3c.mspractice.dto.helpers.EnumItemFormatDto;
 import dev.j3c.mspractice.dto.helpers.LibraryItemDto;
 import org.springframework.stereotype.Component;
 
@@ -25,8 +23,7 @@ public class SellInvoiceMapper {
                                 .id(libraryItemDto.getId())
                                 .name(libraryItemDto.getName())
                                 .author(libraryItemDto.getAuthor())
-                                .format(EnumItemFormat
-                                        .valueOf(libraryItemDto.getFormat().getType()))
+                                .format(libraryItemDto.getFormat())
                                 .purchasePrice(libraryItemDto.getPurchasePrice())
                                 .build())
                         .collect(Collectors.toList()))
@@ -44,8 +41,7 @@ public class SellInvoiceMapper {
                                 .id(libraryItem.getId())
                                 .name(libraryItem.getName())
                                 .author(libraryItem.getAuthor())
-                                .format(EnumItemFormatDto
-                                        .valueOf(libraryItem.getFormat().getType()))
+                                .format(libraryItem.getFormat())
                                 .purchasePrice(libraryItem.getPurchasePrice())
                                 .build())
                         .collect(Collectors.toList()))

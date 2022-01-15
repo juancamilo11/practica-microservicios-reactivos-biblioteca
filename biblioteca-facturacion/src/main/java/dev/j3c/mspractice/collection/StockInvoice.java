@@ -2,7 +2,6 @@ package dev.j3c.mspractice.collection;
 
 import dev.j3c.mspractice.collection.helpers.LibraryItem;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

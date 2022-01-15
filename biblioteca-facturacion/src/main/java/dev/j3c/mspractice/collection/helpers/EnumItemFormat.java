@@ -1,5 +1,7 @@
 package dev.j3c.mspractice.collection.helpers;
 
+
+
 public enum EnumItemFormat {
     BOOK("Book"),
     ARTICLE("Article"),

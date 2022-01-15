@@ -13,6 +13,6 @@ public class LibraryItem {
     private String id;
     private String name;
     private String author;
-    private EnumItemFormat format;
+    private String format;
     private Double purchasePrice;
 }
