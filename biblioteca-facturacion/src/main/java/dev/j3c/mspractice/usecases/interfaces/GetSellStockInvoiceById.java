@@ -1,5 +1,9 @@
 package dev.j3c.mspractice.usecases.interfaces;
 
-public interface GetSellStockInvoiceById {
+import dev.j3c.mspractice.dto.SellStockInvoiceDto;
+import reactor.core.publisher.Mono;
 
+@FunctionalInterface
+public interface GetSellStockInvoiceById {
+    Mono<SellStockInvoiceDto> apply(String id);
 }

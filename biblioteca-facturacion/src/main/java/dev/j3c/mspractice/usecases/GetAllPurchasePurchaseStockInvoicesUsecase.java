@@ -1,7 +1,7 @@
 package dev.j3c.mspractice.usecases;
 
-import dev.j3c.mspractice.dto.StockInvoiceDto;
-import dev.j3c.mspractice.mapper.StockInvoiceMapper;
+import dev.j3c.mspractice.dto.PurchaseStockInvoiceDto;
+import dev.j3c.mspractice.mapper.PurchaseInvoiceMapper;
 import dev.j3c.mspractice.repository.PurchaseStockInvoiceRepository;
 import dev.j3c.mspractice.usecases.interfaces.GetAllPurchaseStockInvoices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,20 +14,20 @@ import reactor.core.publisher.Flux;
 public class GetAllPurchasePurchaseStockInvoicesUsecase implements GetAllPurchaseStockInvoices {
 
     private final PurchaseStockInvoiceRepository purchaseStockInvoiceRepository;
-    private final StockInvoiceMapper stockInvoiceMapper;
+    private final PurchaseInvoiceMapper purchaseInvoiceMapper;
 
     @Autowired
-    public GetAllPurchasePurchaseStockInvoicesUsecase(PurchaseStockInvoiceRepository purchaseStockInvoiceRepository, StockInvoiceMapper stockInvoiceMapper) {
+    public GetAllPurchasePurchaseStockInvoicesUsecase(PurchaseStockInvoiceRepository purchaseStockInvoiceRepository, PurchaseInvoiceMapper purchaseInvoiceMapper) {
         this.purchaseStockInvoiceRepository = purchaseStockInvoiceRepository;
-        this.stockInvoiceMapper = stockInvoiceMapper;
+        this.purchaseInvoiceMapper = purchaseInvoiceMapper;
     }
 
     @Override
-    public Flux<StockInvoiceDto> get() {
+    public Flux<PurchaseStockInvoiceDto> get() {
         return purchaseStockInvoiceRepository
                 .findAll()
                 .switchIfEmpty(Flux.empty())
-                .map(stockInvoice -> stockInvoiceMapper
+                .map(stockInvoice -> purchaseInvoiceMapper
                         .mapFromEntityToDto()
                         .apply(stockInvoice));
     }
