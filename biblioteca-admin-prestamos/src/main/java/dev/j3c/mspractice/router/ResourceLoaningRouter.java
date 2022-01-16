@@ -4,6 +4,7 @@ import dev.j3c.mspractice.dto.ResourceLoaningDto;
 import dev.j3c.mspractice.usecases.DeleteResourceLoanUsecase;
 import dev.j3c.mspractice.usecases.GetAllResourceLoansUsecase;
 import dev.j3c.mspractice.usecases.RecieveResourceLoanUsecase;
+import dev.j3c.mspractice.usecases.interfaces.GetResourceLoanByCustomerId;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -21,13 +22,23 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 public class ResourceLoaningRouter {
 
     @Bean
-    public RouterFunction<ServerResponse> getAllResourceLoans(GetAllResourceLoansUsecase getAllResourceLoansUsecase) {
+    public RouterFunction<ServerResponse> getAllResourceLoansRoute(GetAllResourceLoansUsecase getAllResourceLoansUsecase) {
         return route(GET("/get-all-active-resource-loans")
                 .and(accept(MediaType.APPLICATION_JSON)), request ->
                 ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(BodyInserters.fromPublisher(getAllResourceLoansUsecase.get(), ResourceLoaningDto.class)));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> getAllResourceLoansByCustomerIdRoute(GetResourceLoanByCustomerId getResourceLoanByCustomerId) {
+        return route(GET("/get-customer-active-resource-loans/{customerId}")
+                .and(accept(MediaType.APPLICATION_JSON)), request ->
+                ServerResponse
+                        .ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(getResourceLoanByCustomerId.apply(request.pathVariable("customerId")), ResourceLoaningDto.class)));
     }
 
     @Bean
@@ -45,7 +56,7 @@ public class ResourceLoaningRouter {
     }
 
     @Bean
-    public RouterFunction<ServerResponse> deleteLoanforResourceDevolution(DeleteResourceLoanUsecase deleteResourceLoanUsecase) {
+    public RouterFunction<ServerResponse> deleteLoanforResourceDevolutionRoute(DeleteResourceLoanUsecase deleteResourceLoanUsecase) {
         return route(DELETE("/delete-user/{id}")
                 .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
                 .ok()
