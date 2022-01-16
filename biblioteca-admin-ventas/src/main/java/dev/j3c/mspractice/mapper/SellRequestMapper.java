@@ -15,6 +15,7 @@ public class SellRequestMapper {
     public Function<SellRequest, SellRequestDto> mapFromEntityToDto() {
         return (SellRequest sellRequest) -> SellRequestDto.builder()
                 .id(sellRequest.getId())
+                .type(sellRequest.getType())
                 .customerId(sellRequest.getCustomerId())
                 .customerName(sellRequest.getCustomerName())
                 .itemsList(sellRequest.getItemsList().stream().map(libraryItem -> LibraryItemDto.builder()
@@ -31,6 +32,7 @@ public class SellRequestMapper {
     public Function<SellRequestDto, SellRequest> mapFromDtoToEntity() {
         return (SellRequestDto sellRequestDto) -> SellRequest.builder()
                 .id(sellRequestDto.getId())
+                .type(sellRequestDto.getType())
                 .customerId(sellRequestDto.getCustomerId())
                 .customerName(sellRequestDto.getCustomerName())
                 .itemsList(sellRequestDto.getItemsList().stream().map(libraryItem -> LibraryItem.builder()

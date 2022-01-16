@@ -1,6 +1,5 @@
 package dev.j3c.mspractice.dto.helpers;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
