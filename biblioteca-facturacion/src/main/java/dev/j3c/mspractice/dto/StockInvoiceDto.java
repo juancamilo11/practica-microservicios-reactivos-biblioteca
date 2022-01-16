@@ -1,5 +1,6 @@
 package dev.j3c.mspractice.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.j3c.mspractice.dto.helpers.LibraryItemDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,12 +17,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StockInvoiceDto {
-    @NotBlank
+
     private String id;
-    @NotNull
+
     @DateTimeFormat(style = "yyyy-MM-dd")
+    @JsonProperty("date")
     private LocalDate date;
-    @NotEmpty
+
+
     private List<LibraryItemDto> itemsList;
     private double totalPrice;
 }

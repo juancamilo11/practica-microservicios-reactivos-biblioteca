@@ -14,14 +14,13 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public class RecieveFromApprovedSellQueueUsecase {
 
-    private final Gson gson;
+    private final Gson gson = new Gson();
     private final SellStockInvoiceRepository sellInvoiceRepository;
     private final SellInvoiceMapper sellInvoiceMapper;
     private final Logger logger = LoggerFactory.getLogger(RecieveFromApprovedSellQueueUsecase.class);
 
     @Autowired
     public RecieveFromApprovedSellQueueUsecase(SellStockInvoiceRepository sellInvoiceRepository, SellInvoiceMapper sellInvoiceMapper) {
-        this.gson = new Gson();
         this.sellInvoiceRepository = sellInvoiceRepository;
         this.sellInvoiceMapper = sellInvoiceMapper;
     }
@@ -30,8 +29,6 @@ public class RecieveFromApprovedSellQueueUsecase {
         this.sellInvoiceRepository
                 .save(this.sellInvoiceMapper
                         .mapFromDtoToEntity()
-                        .apply(gson.fromJson(messageReceived, SellStockInvoiceDto.class)))
-                .doOnNext(invoiceRecieved -> logger
-                        .info("Se ha ingresado la factura de venta: " + gson.toJson(invoiceRecieved)));
+                        .apply(gson.fromJson(messageReceived, SellStockInvoiceDto.class))).subscribe();
     }
 }

@@ -10,11 +10,12 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.util.function.Function;
 
-import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
-import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
+import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
@@ -86,31 +87,31 @@ public class StockInvoiceRouter {
                                         StockInvoiceDto.class)));
     }
 
-//    @Bean
-//    public RouterFunction<ServerResponse> addPurchaseStockInvoiceRoute(AddNewPurchaseInvoiceUsecase addNewPurchaseInvoiceUsecase) {
-//        Function<PurchaseStockInvoiceDto, Mono<ServerResponse>> executor = (PurchaseStockInvoiceDto purchaseStockInvoiceDto) ->  addNewPurchaseInvoiceUsecase
-//                .apply(purchaseStockInvoiceDto)
-//                .flatMap(purchaseInvoiceDto -> ServerResponse
-//                        .ok()
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .bodyValue(purchaseInvoiceDto));
-//        return route(POST("/add-purchase-invoice")
-//                .and(accept(MediaType.APPLICATION_JSON)), request -> request
-//                .bodyToMono(PurchaseStockInvoiceDto.class)
-//                .flatMap(executor));
-//    }
-//
-//    @Bean
-//    public RouterFunction<ServerResponse> addSellStockInvoiceRoute(AddNewSellInvoiceUsecase addNewSellInvoiceUsecase) {
-//        Function<SellStockInvoiceDto, Mono<ServerResponse>> executor = (SellStockInvoiceDto sellStockInvoiceDto) ->  addNewSellInvoiceUsecase
-//                .apply(sellStockInvoiceDto)
-//                .flatMap(sellInvoiceDto -> ServerResponse
-//                        .ok()
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .bodyValue(sellInvoiceDto));
-//        return route(POST("/add-sell-invoice")
-//                .and(accept(MediaType.APPLICATION_JSON)), request -> request
-//                .bodyToMono(SellStockInvoiceDto.class)
-//                .flatMap(executor));
-//    }
+    @Bean
+    public RouterFunction<ServerResponse> addPurchaseStockInvoiceRoute(AddNewPurchaseInvoiceUsecase addNewPurchaseInvoiceUsecase) {
+        Function<PurchaseStockInvoiceDto, Mono<ServerResponse>> executor = (PurchaseStockInvoiceDto purchaseStockInvoiceDto) ->  addNewPurchaseInvoiceUsecase
+                .apply(purchaseStockInvoiceDto)
+                .flatMap(purchaseInvoiceDto -> ServerResponse
+                        .ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(purchaseInvoiceDto));
+        return route(POST("/add-purchase-invoice")
+                .and(accept(MediaType.APPLICATION_JSON)), request -> request
+                .bodyToMono(PurchaseStockInvoiceDto.class)
+                .flatMap(executor));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> addSellStockInvoiceRoute(AddNewSellInvoiceUsecase addNewSellInvoiceUsecase) {
+        Function<SellStockInvoiceDto, Mono<ServerResponse>> executor = (SellStockInvoiceDto sellStockInvoiceDto) ->  addNewSellInvoiceUsecase
+                .apply(sellStockInvoiceDto)
+                .flatMap(sellInvoiceDto -> ServerResponse
+                        .ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(sellInvoiceDto));
+        return route(POST("/add-sell-invoice")
+                .and(accept(MediaType.APPLICATION_JSON)), request -> request
+                .bodyToMono(SellStockInvoiceDto.class)
+                .flatMap(executor));
+    }
 }

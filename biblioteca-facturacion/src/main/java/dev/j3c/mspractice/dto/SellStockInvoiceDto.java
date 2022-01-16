@@ -18,7 +18,9 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Document
 public class SellStockInvoiceDto extends StockInvoiceDto {
+
     private String customerId;
+
     private String customerName;
 
     @Builder
