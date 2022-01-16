@@ -25,8 +25,8 @@ public class SellStockInvoiceDto extends StockInvoiceDto {
     private String customerName;
 
     @Builder
-    public SellStockInvoiceDto(@NotBlank String id, @NotNull LocalDate date, @NotEmpty List<LibraryItemDto> itemsList, double totalPrice, String customerId, String customerName) {
-        super(id, date, itemsList, totalPrice);
+    public SellStockInvoiceDto(@NotBlank String id, String invoiceType, @NotNull LocalDate date, @NotEmpty List<LibraryItemDto> itemsList, double totalPrice, String customerId, String customerName) {
+        super(id, invoiceType, date, itemsList, totalPrice);
         this.customerId = customerId;
         this.customerName = customerName;
     }

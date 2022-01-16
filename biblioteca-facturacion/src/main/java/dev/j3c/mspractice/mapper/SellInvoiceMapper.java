@@ -15,6 +15,7 @@ public class SellInvoiceMapper {
     public Function<SellStockInvoiceDto, SellStockInvoice> mapFromDtoToEntity() {
         return (SellStockInvoiceDto sellStockInvoiceDto) -> SellStockInvoice.builder()
                 .id(sellStockInvoiceDto.getId())
+                .invoiceType(sellStockInvoiceDto.getInvoiceType())
                 .date(sellStockInvoiceDto.getDate())
                 .itemsList(sellStockInvoiceDto.getItemsList()
                         .stream()
@@ -34,6 +35,7 @@ public class SellInvoiceMapper {
         return (SellStockInvoice sellStockInvoice) -> SellStockInvoiceDto.builder()
                 .id(sellStockInvoice.getId())
                 .date(sellStockInvoice.getDate())
+                .invoiceType(sellStockInvoice.getInvoiceType())
                 .itemsList(sellStockInvoice.getItemsList()
                         .stream()
                         .map(libraryItem -> LibraryItemDto

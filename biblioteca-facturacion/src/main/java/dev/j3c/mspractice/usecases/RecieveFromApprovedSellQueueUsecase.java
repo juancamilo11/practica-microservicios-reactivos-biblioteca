@@ -37,6 +37,7 @@ public class RecieveFromApprovedSellQueueUsecase {
 
     public void receiveMessage(SellStockInvoiceDto sellStockInvoiceDto) {
         this.calculateTotalPrice(sellStockInvoiceDto);
+        sellStockInvoiceDto.setInvoiceType("Sale");
         logger.info("enviando factura de venta");
         this.sellInvoiceRepository
                 .save(this.sellInvoiceMapper

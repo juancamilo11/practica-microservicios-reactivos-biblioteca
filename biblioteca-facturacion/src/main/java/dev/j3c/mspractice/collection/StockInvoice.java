@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class StockInvoice {
     private LocalDate date;
+    private String invoiceType;
     private List<LibraryItem> itemsList;
-    private double totalPrice;
+    private Double totalPrice;
 }

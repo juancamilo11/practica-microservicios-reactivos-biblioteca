@@ -16,6 +16,7 @@ public class PurchaseInvoiceMapper {
         return (PurchaseStockInvoiceDto purchaseStockInvoiceDto) -> PurchaseStockInvoice.builder()
                 .id(purchaseStockInvoiceDto.getId())
                 .date(purchaseStockInvoiceDto.getDate())
+                .invoiceType(purchaseStockInvoiceDto.getInvoiceType())
                 .itemsList(purchaseStockInvoiceDto.getItemsList()
                         .stream()
                         .map(libraryItemDto -> LibraryItem
@@ -34,6 +35,7 @@ public class PurchaseInvoiceMapper {
         return (PurchaseStockInvoice purchaseStockInvoice) -> PurchaseStockInvoiceDto.builder()
                 .id(purchaseStockInvoice.getId())
                 .date(purchaseStockInvoice.getDate())
+                .invoiceType(purchaseStockInvoice.getInvoiceType())
                 .itemsList(purchaseStockInvoice.getItemsList()
                         .stream()
                         .map(libraryItem -> LibraryItemDto

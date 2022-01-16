@@ -76,6 +76,7 @@ public class RabbitMQConsumerConfig {
         }
         PurchaseStockInvoiceDto newPurchaseInvoice = new PurchaseStockInvoiceDto(
                 map.get("id").toString(),
+                null,
                 LocalDate.parse(map.get("date").toString()),
                 this.getListItems(map.get("itemsList").toString()),
                 10,
@@ -94,6 +95,7 @@ public class RabbitMQConsumerConfig {
         }
         SellStockInvoiceDto newSellInvoice = new SellStockInvoiceDto(
                 map.get("id").toString(),
+                null,
                 LocalDate.parse(map.get("date").toString()),
                 this.getListItems(map.get("itemsList").toString()),
                 10,

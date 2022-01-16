@@ -2,7 +2,6 @@ package dev.j3c.mspractice.usecases;
 
 import com.google.gson.Gson;
 import dev.j3c.mspractice.dto.PurchaseStockInvoiceDto;
-import dev.j3c.mspractice.dto.SellStockInvoiceDto;
 import dev.j3c.mspractice.dto.helpers.LibraryItemDto;
 import dev.j3c.mspractice.mapper.PurchaseInvoiceMapper;
 import dev.j3c.mspractice.repository.PurchaseStockInvoiceRepository;
@@ -38,6 +37,7 @@ public class RecieveFromNewStockQueueUsecase {
 
     public void receiveMessage(PurchaseStockInvoiceDto purchaseStockInvoiceDto) {
         this.calculateTotalPrice(purchaseStockInvoiceDto);
+        purchaseStockInvoiceDto.setInvoiceType("Purchase");
         logger.info("enviando factura de venta");
         this.purchaseInvoiceRepository
                 .save(this.purchaseInvoiceMapper

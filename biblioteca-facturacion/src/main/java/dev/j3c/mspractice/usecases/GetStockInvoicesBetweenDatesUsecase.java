@@ -7,6 +7,7 @@ import dev.j3c.mspractice.repository.PurchaseStockInvoiceRepository;
 import dev.j3c.mspractice.repository.SellStockInvoiceRepository;
 import dev.j3c.mspractice.usecases.interfaces.GetStockInvoicesBetweenDates;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Flux;
@@ -30,7 +31,8 @@ public class GetStockInvoicesBetweenDatesUsecase implements GetStockInvoicesBetw
     }
 
     @Override
-    public Flux<StockInvoiceDto> apply(LocalDate dateStart, LocalDate dateEnd) {
+    public Flux<StockInvoiceDto> apply(@DateTimeFormat(style = "yyyy-MM-dd") LocalDate dateStart, @DateTimeFormat(style = "yyyy-MM-dd") LocalDate dateEnd) {
+        if(dateStart.isAfter(dateEnd)) return Flux.empty();
         return Flux.concat(purchaseInvoiceRepository
                 .findAllByDateBetween(dateStart, dateEnd)
                         .map(invoice -> purchaseInvoiceMapper

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import reactor.core.publisher.Flux;
 
+import javax.validation.constraints.Min;
+
 @Service
 @Validated
 public class GetStockInvoicesBetweenPricesUsecase implements GetStockInvoicesBetweenPrices {
@@ -28,7 +30,9 @@ public class GetStockInvoicesBetweenPricesUsecase implements GetStockInvoicesBet
     }
 
     @Override
-    public Flux<StockInvoiceDto> apply(double minPrice, double maxPrice) {
+    public Flux<StockInvoiceDto> apply(@Min(value = 0) double minPrice, @Min(value = 0)  double maxPrice) {
+        if(minPrice > maxPrice) return Flux.empty();
+
         return Flux.concat(purchaseInvoiceRepository
                         .findAllByTotalPriceBetween(minPrice, maxPrice)
                         .map(invoice -> purchaseInvoiceMapper

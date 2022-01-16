@@ -20,6 +20,8 @@ import java.util.List;
 public class StockInvoiceDto {
     @NotBlank
     private String id;
+    @Null
+    private String invoiceType;
     @NotNull
     @DateTimeFormat(style = "yyyy-MM-dd")
     @JsonProperty("date")
@@ -27,5 +29,5 @@ public class StockInvoiceDto {
     @NotEmpty
     private List<LibraryItemDto> itemsList;
     @Null
-    private double totalPrice;
+    private Double totalPrice;
 }

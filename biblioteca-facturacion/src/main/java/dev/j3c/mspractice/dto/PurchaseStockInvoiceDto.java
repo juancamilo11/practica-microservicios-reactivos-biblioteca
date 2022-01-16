@@ -25,8 +25,8 @@ public class PurchaseStockInvoiceDto extends StockInvoiceDto {
     private String providerName;
 
     @Builder
-    public PurchaseStockInvoiceDto(@NotBlank String id, @NotNull LocalDate date, @NotEmpty List<LibraryItemDto> itemsList, double totalPrice, String nit, String providerName) {
-        super(id, date, itemsList, totalPrice);
+    public PurchaseStockInvoiceDto(@NotBlank String id, String invoiceType, @NotNull LocalDate date, @NotEmpty List<LibraryItemDto> itemsList, double totalPrice, String nit, String providerName) {
+        super(id, invoiceType, date, itemsList, totalPrice);
         this.nit = nit;
         this.providerName = providerName;
     }

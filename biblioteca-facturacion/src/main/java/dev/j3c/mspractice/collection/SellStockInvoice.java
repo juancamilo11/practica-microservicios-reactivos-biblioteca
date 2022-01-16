@@ -22,8 +22,8 @@ public class SellStockInvoice extends StockInvoice {
     private String customerName;
 
     @Builder
-    public SellStockInvoice(LocalDate date, List<LibraryItem> itemsList, double totalPrice, String id, String customerId, String customerName) {
-        super(date, itemsList, totalPrice);
+    public SellStockInvoice(LocalDate date, String invoiceType, List<LibraryItem> itemsList, double totalPrice, String id, String customerId, String customerName) {
+        super(date, invoiceType,itemsList, totalPrice);
         this.id = id;
         this.customerId = customerId;
         this.customerName = customerName;
