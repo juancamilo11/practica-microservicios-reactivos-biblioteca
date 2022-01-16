@@ -1,4 +1,4 @@
-package dev.j3c.config;
+package dev.j3c.mspractice.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
