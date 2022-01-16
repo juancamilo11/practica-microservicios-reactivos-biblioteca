@@ -19,8 +19,9 @@ import java.util.List;
 @Document
 public class SellStockInvoiceDto extends StockInvoiceDto {
 
+    @NotBlank
     private String customerId;
-
+    @NotBlank
     private String customerName;
 
     @Builder

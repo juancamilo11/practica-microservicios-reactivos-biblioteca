@@ -2,10 +2,6 @@ package dev.j3c.mspractice.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import dev.j3c.mspractice.dto.PurchaseStockInvoiceDto;
 import dev.j3c.mspractice.dto.SellStockInvoiceDto;
 import dev.j3c.mspractice.dto.helpers.LibraryItemDto;
@@ -16,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -72,6 +71,9 @@ public class RabbitMQConsumerConfig {
     public void listenerOfNewStockQueue(String messageReceived) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.readValue(messageReceived, Map.class);
+        if(map.get("itemsList").toString().equals("[]")) {
+            return;
+        }
         PurchaseStockInvoiceDto newPurchaseInvoice = new PurchaseStockInvoiceDto(
                 map.get("id").toString(),
                 LocalDate.parse(map.get("date").toString()),
@@ -87,6 +89,9 @@ public class RabbitMQConsumerConfig {
     public void listenerOfApprovedSellQueue(String messageReceived) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.readValue(messageReceived, Map.class);
+        if(map.get("itemsList").toString().equals("[]")) {
+            return;
+        }
         SellStockInvoiceDto newSellInvoice = new SellStockInvoiceDto(
                 map.get("id").toString(),
                 LocalDate.parse(map.get("date").toString()),

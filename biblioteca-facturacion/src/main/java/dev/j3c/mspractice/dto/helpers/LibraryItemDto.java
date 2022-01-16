@@ -1,6 +1,5 @@
 package dev.j3c.mspractice.dto.helpers;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

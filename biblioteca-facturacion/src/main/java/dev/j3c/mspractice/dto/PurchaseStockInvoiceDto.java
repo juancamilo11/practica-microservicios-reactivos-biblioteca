@@ -1,6 +1,5 @@
 package dev.j3c.mspractice.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.j3c.mspractice.dto.helpers.LibraryItemDto;
 import lombok.Builder;
 import lombok.Data;
@@ -20,9 +19,9 @@ import java.util.List;
 @Document
 public class PurchaseStockInvoiceDto extends StockInvoiceDto {
 
-
+    @NotBlank
     private String nit;
-
+    @NotBlank
     private String providerName;
 
     @Builder
