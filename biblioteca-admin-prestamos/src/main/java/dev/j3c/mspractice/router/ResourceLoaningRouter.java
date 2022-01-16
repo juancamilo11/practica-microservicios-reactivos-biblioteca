@@ -1,7 +1,8 @@
 package dev.j3c.mspractice.router;
 
 import dev.j3c.mspractice.dto.ResourceLoaningDto;
-import dev.j3c.mspractice.usecases.GetAllLoanResourcesUsecase;
+import dev.j3c.mspractice.usecases.DeleteResourceLoanUsecase;
+import dev.j3c.mspractice.usecases.GetAllResourceLoansUsecase;
 import dev.j3c.mspractice.usecases.RecieveResourceLoanUsecase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,13 +21,13 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 public class ResourceLoaningRouter {
 
     @Bean
-    public RouterFunction<ServerResponse> getAllResourceLoans(GetAllLoanResourcesUsecase getAllLoanResourcesUsecase) {
-        return route(GET("/get-all-resource-active-loans")
+    public RouterFunction<ServerResponse> getAllResourceLoans(GetAllResourceLoansUsecase getAllResourceLoansUsecase) {
+        return route(GET("/get-all-active-resource-loans")
                 .and(accept(MediaType.APPLICATION_JSON)), request ->
                 ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(BodyInserters.fromPublisher(getAllLoanResourcesUsecase.get(), ResourceLoaningDto.class)));
+                        .body(BodyInserters.fromPublisher(getAllResourceLoansUsecase.get(), ResourceLoaningDto.class)));
     }
 
     @Bean
@@ -44,8 +45,13 @@ public class ResourceLoaningRouter {
     }
 
     @Bean
-    public RouterFunction<ServerResponse> deleteLoanforResourceDevolution() {
-
+    public RouterFunction<ServerResponse> deleteLoanforResourceDevolution(DeleteResourceLoanUsecase deleteResourceLoanUsecase) {
+        return route(DELETE("/delete-user/{id}")
+                .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromPublisher(deleteResourceLoanUsecase.accept(request.pathVariable("id")),Void.class)));
     }
+
 
 }

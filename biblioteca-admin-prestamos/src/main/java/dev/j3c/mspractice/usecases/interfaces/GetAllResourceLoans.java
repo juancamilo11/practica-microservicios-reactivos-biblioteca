@@ -4,6 +4,6 @@ import dev.j3c.mspractice.dto.ResourceLoaningDto;
 import reactor.core.publisher.Flux;
 
 @FunctionalInterface
-public interface GetAllLoanResources {
+public interface GetAllResourceLoans {
     Flux<ResourceLoaningDto> get();
 }
