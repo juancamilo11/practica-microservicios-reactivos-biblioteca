@@ -25,11 +25,12 @@ public class RecieveFromNewStockQueueUsecase {
         this.purchaseInvoiceMapper = purchaseInvoiceMapper;
     }
 
-    public void receiveMessage(String messageReceived) {
+    public void receiveMessage(PurchaseStockInvoiceDto messageReceived) {
+        logger.info("enviando factura de compra");
         this.purchaseInvoiceRepository
                 .save(this.purchaseInvoiceMapper
                         .mapFromDtoToEntity()
-                        .apply(gson.fromJson(messageReceived, PurchaseStockInvoiceDto.class))).subscribe();
+                        .apply(messageReceived)).subscribe();
     }
 
 }

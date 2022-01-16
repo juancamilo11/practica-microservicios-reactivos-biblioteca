@@ -25,10 +25,11 @@ public class RecieveFromApprovedSellQueueUsecase {
         this.sellInvoiceMapper = sellInvoiceMapper;
     }
 
-    public void receiveMessage(String messageReceived) {
+    public void receiveMessage(SellStockInvoiceDto messageReceived) {
+        logger.info("enviando factura de venta");
         this.sellInvoiceRepository
                 .save(this.sellInvoiceMapper
                         .mapFromDtoToEntity()
-                        .apply(gson.fromJson(messageReceived, SellStockInvoiceDto.class))).subscribe();
+                        .apply(messageReceived)).subscribe();
     }
 }

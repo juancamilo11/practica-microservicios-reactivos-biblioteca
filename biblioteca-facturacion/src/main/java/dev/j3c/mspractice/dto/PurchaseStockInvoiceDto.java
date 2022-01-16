@@ -31,6 +31,4 @@ public class PurchaseStockInvoiceDto extends StockInvoiceDto {
         this.nit = nit;
         this.providerName = providerName;
     }
-
-
 }

@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -37,17 +34,6 @@ public class RabbitMQConsumerConfig {
         this.newStockMessageReciever = newStockMessageReciever;
     }
 
-    @RabbitListener(queues = {APPROVED_SELL_QUEUE})
-    public void listenerOfApprovedSellQueue(String messageReceived){
-        Gson gson = new Gson();
-        try {
-            gson.fromJson(messageReceived, PurchaseStockInvoiceDto.class);
-            approvedSellMessageReciever.receiveMessage(messageReceived);
-        } catch(Exception e) {
-            e.printStackTrace(System.out);
-        }
-    }
-
     private List<String> getLibraryItemsList(String itemsList) {
 
         return Arrays.stream(itemsList
@@ -60,11 +46,25 @@ public class RabbitMQConsumerConfig {
                 .collect(Collectors.toList());
     }
 
-    private List<String> getListItems(String listItems) {
-        Gson gson = new Gson();
+    private List<LibraryItemDto> getListItems(String listItems) {
         return this.getLibraryItemsList(listItems)
                 .stream()
-                //.map(item -> gson.fromJson(item, LibraryItemDto.class))
+                .map(itemString -> {
+                    List<String> properties = Arrays
+                            .stream(itemString.substring(1, itemString.length() -1)
+                                    .split(", "))
+                            .collect(Collectors.toList());
+                    Map<String, Object> propertiesMap = new HashMap<>();
+                    properties.forEach(element -> {
+                        String property = element.split(":")[0];
+                        Object value = element.split(":")[1];
+                        propertiesMap.put(property, value);
+                    });
+                    return new LibraryItemDto(propertiesMap.get("id").toString(),
+                            propertiesMap.get("name").toString(),
+                            propertiesMap.get("author").toString(), propertiesMap.get("format").toString(),
+                            Double.parseDouble(propertiesMap.get("purchasePrice").toString()));
+                })
                 .collect(Collectors.toList());
     }
 
@@ -75,15 +75,26 @@ public class RabbitMQConsumerConfig {
         PurchaseStockInvoiceDto newPurchaseInvoice = new PurchaseStockInvoiceDto(
                 map.get("id").toString(),
                 LocalDate.parse(map.get("date").toString()),
-                List.of(new LibraryItemDto(), new LibraryItemDto()),
+                this.getListItems(map.get("itemsList").toString()),
                 10,
                 map.get("nit").toString(),
                 map.get("providerName").toString()
         );
-
-        this.getListItems(map.get("itemsList").toString()).forEach(System.out::println);
-        //System.out.println(map.get("itemsList").toString());
+        newStockMessageReciever.receiveMessage(newPurchaseInvoice);
     }
 
-
+    @RabbitListener(queues = {APPROVED_SELL_QUEUE})
+    public void listenerOfApprovedSellQueue(String messageReceived) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> map = mapper.readValue(messageReceived, Map.class);
+        SellStockInvoiceDto newSellInvoice = new SellStockInvoiceDto(
+                map.get("id").toString(),
+                LocalDate.parse(map.get("date").toString()),
+                this.getListItems(map.get("itemsList").toString()),
+                10,
+                map.get("customerId").toString(),
+                map.get("customerName").toString()
+        );
+        approvedSellMessageReciever.receiveMessage(newSellInvoice);
+    }
 }
