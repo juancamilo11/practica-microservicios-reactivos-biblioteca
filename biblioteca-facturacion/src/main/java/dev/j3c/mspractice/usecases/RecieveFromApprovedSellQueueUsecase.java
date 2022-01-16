@@ -2,6 +2,7 @@ package dev.j3c.mspractice.usecases;
 
 import com.google.gson.Gson;
 import dev.j3c.mspractice.dto.SellStockInvoiceDto;
+import dev.j3c.mspractice.dto.helpers.LibraryItemDto;
 import dev.j3c.mspractice.mapper.SellInvoiceMapper;
 import dev.j3c.mspractice.repository.SellStockInvoiceRepository;
 import org.slf4j.Logger;
@@ -25,11 +26,21 @@ public class RecieveFromApprovedSellQueueUsecase {
         this.sellInvoiceMapper = sellInvoiceMapper;
     }
 
-    public void receiveMessage(SellStockInvoiceDto messageReceived) {
+    private void calculateTotalPrice(SellStockInvoiceDto sellStockInvoiceDto) {
+        sellStockInvoiceDto
+                .setTotalPrice(sellStockInvoiceDto
+                        .getItemsList()
+                        .stream()
+                        .mapToDouble(LibraryItemDto::getPurchasePrice)
+                        .reduce(0, Double::sum));
+    }
+
+    public void receiveMessage(SellStockInvoiceDto sellStockInvoiceDto) {
+        this.calculateTotalPrice(sellStockInvoiceDto);
         logger.info("enviando factura de venta");
         this.sellInvoiceRepository
                 .save(this.sellInvoiceMapper
                         .mapFromDtoToEntity()
-                        .apply(messageReceived)).subscribe();
+                        .apply(sellStockInvoiceDto)).subscribe();
     }
 }

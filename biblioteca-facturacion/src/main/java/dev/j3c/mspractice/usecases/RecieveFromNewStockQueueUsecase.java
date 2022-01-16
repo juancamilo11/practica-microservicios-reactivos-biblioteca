@@ -2,6 +2,8 @@ package dev.j3c.mspractice.usecases;
 
 import com.google.gson.Gson;
 import dev.j3c.mspractice.dto.PurchaseStockInvoiceDto;
+import dev.j3c.mspractice.dto.SellStockInvoiceDto;
+import dev.j3c.mspractice.dto.helpers.LibraryItemDto;
 import dev.j3c.mspractice.mapper.PurchaseInvoiceMapper;
 import dev.j3c.mspractice.repository.PurchaseStockInvoiceRepository;
 import org.slf4j.Logger;
@@ -25,12 +27,22 @@ public class RecieveFromNewStockQueueUsecase {
         this.purchaseInvoiceMapper = purchaseInvoiceMapper;
     }
 
-    public void receiveMessage(PurchaseStockInvoiceDto messageReceived) {
-        logger.info("enviando factura de compra");
+    private void calculateTotalPrice(PurchaseStockInvoiceDto purchaseStockInvoiceDto) {
+        purchaseStockInvoiceDto
+                .setTotalPrice(purchaseStockInvoiceDto
+                        .getItemsList()
+                        .stream()
+                        .mapToDouble(LibraryItemDto::getPurchasePrice)
+                        .reduce(0, Double::sum));
+    }
+
+    public void receiveMessage(PurchaseStockInvoiceDto purchaseStockInvoiceDto) {
+        this.calculateTotalPrice(purchaseStockInvoiceDto);
+        logger.info("enviando factura de venta");
         this.purchaseInvoiceRepository
                 .save(this.purchaseInvoiceMapper
                         .mapFromDtoToEntity()
-                        .apply(messageReceived)).subscribe();
+                        .apply(purchaseStockInvoiceDto)).subscribe();
     }
 
 }
