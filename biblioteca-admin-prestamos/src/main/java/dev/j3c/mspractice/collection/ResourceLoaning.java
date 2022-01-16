@@ -20,7 +20,6 @@ public class ResourceLoaning {
 
     @Id
     private String id;
-    private String type;
     private LocalDate date;
     private List<LibraryItem> itemsList;
     private String customerId;

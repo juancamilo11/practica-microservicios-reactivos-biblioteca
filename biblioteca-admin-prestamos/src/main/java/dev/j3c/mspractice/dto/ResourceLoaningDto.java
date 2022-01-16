@@ -22,8 +22,6 @@ public class ResourceLoaningDto {
 
     @NotBlank
     private String id;
-    @NotBlank
-    private String type;
     @NotNull
     @DateTimeFormat(style = "yyyy-MM-dd")
     @JsonProperty("date")

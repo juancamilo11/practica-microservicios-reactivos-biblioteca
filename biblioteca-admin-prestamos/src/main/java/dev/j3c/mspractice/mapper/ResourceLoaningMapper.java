@@ -15,7 +15,6 @@ public class ResourceLoaningMapper {
     public Function<ResourceLoaning, ResourceLoaningDto> mapFromEntityToDto() {
         return (ResourceLoaning resourceLoaning) -> ResourceLoaningDto.builder()
                 .id(resourceLoaning.getId())
-                .type(resourceLoaning.getType())
                 .customerId(resourceLoaning.getCustomerId())
                 .customerName(resourceLoaning.getCustomerName())
                 .itemsList(resourceLoaning.getItemsList().stream().map(libraryItem -> LibraryItemDto.builder()
@@ -32,7 +31,6 @@ public class ResourceLoaningMapper {
     public Function<ResourceLoaningDto, ResourceLoaning> mapFromDtoToEntity() {
         return (ResourceLoaningDto resourceLoaningDto) -> ResourceLoaning.builder()
                 .id(resourceLoaningDto.getId())
-                .type(resourceLoaningDto.getType())
                 .customerId(resourceLoaningDto.getCustomerId())
                 .customerName(resourceLoaningDto.getCustomerName())
                 .itemsList(resourceLoaningDto.getItemsList().stream().map(libraryItem -> LibraryItem.builder()
