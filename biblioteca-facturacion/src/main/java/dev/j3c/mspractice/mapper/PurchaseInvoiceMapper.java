@@ -28,6 +28,8 @@ public class PurchaseInvoiceMapper {
                                 .purchasePrice(libraryItemDto.getPurchasePrice())
                                 .build())
                         .collect(Collectors.toList()))
+                .nit(purchaseStockInvoiceDto.getNit())
+                .providerName(purchaseStockInvoiceDto.getProviderName())
                 .totalPrice(purchaseStockInvoiceDto.getTotalPrice()).build();
     }
 
@@ -47,6 +49,8 @@ public class PurchaseInvoiceMapper {
                                 .purchasePrice(libraryItem.getPurchasePrice())
                                 .build())
                         .collect(Collectors.toList()))
+                .nit(purchaseStockInvoice.getNit())
+                .providerName(purchaseStockInvoice.getProviderName())
                 .totalPrice(purchaseStockInvoice.getTotalPrice()).build();
     }
 

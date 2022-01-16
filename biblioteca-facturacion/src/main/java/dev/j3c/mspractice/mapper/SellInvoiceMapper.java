@@ -28,6 +28,8 @@ public class SellInvoiceMapper {
                                 .purchasePrice(libraryItemDto.getPurchasePrice())
                                 .build())
                         .collect(Collectors.toList()))
+                .customerId(sellStockInvoiceDto.getCustomerId())
+                .customerName(sellStockInvoiceDto.getCustomerName())
                 .totalPrice(sellStockInvoiceDto.getTotalPrice()).build();
     }
 
@@ -47,6 +49,8 @@ public class SellInvoiceMapper {
                                 .purchasePrice(libraryItem.getPurchasePrice())
                                 .build())
                         .collect(Collectors.toList()))
+                .customerId(sellStockInvoice.getCustomerId())
+                .customerName(sellStockInvoice.getCustomerName())
                 .totalPrice(sellStockInvoice.getTotalPrice()).build();
     }
 }
