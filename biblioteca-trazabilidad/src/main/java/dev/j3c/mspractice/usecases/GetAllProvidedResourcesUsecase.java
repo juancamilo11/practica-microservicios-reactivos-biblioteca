@@ -1,8 +1,8 @@
 package dev.j3c.mspractice.usecases;
 
 import dev.j3c.mspractice.dto.ResourceLoaningDto;
-import dev.j3c.mspractice.mapper.ResourceLoaningMapper;
-import dev.j3c.mspractice.repository.ResourceLoaningRepository;
+import dev.j3c.mspractice.mapper.ResourceMapper;
+import dev.j3c.mspractice.repository.ProvidedResourcesRepository;
 import dev.j3c.mspractice.usecases.interfaces.GetAllApprovedSales;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,20 +13,20 @@ import reactor.core.publisher.Flux;
 @Validated
 public class GetAllProvidedResourcesUsecase implements GetAllApprovedSales {
 
-    private final ResourceLoaningRepository resourceLoaningRepository;
-    private final ResourceLoaningMapper resourceLoaningMapper;
+    private final ProvidedResourcesRepository providedResourcesRepository;
+    private final ResourceMapper resourceMapper;
     @Autowired
-    public GetAllProvidedResourcesUsecase(ResourceLoaningRepository resourceLoaningRepository, ResourceLoaningMapper resourceLoaningMapper) {
-        this.resourceLoaningRepository = resourceLoaningRepository;
-        this.resourceLoaningMapper = resourceLoaningMapper;
+    public GetAllProvidedResourcesUsecase(ProvidedResourcesRepository providedResourcesRepository, ResourceMapper resourceMapper) {
+        this.providedResourcesRepository = providedResourcesRepository;
+        this.resourceMapper = resourceMapper;
     }
 
     @Override
     public Flux<ResourceLoaningDto> get() {
-        return this.resourceLoaningRepository
+        return this.providedResourcesRepository
                 .findAll()
                 .switchIfEmpty(Flux.empty())
-                .map(resourceLoaning -> this.resourceLoaningMapper
+                .map(resourceLoaning -> this.resourceMapper
                         .mapFromEntityToDto()
                         .apply(resourceLoaning));
     }

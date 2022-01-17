@@ -21,17 +21,15 @@ import java.util.stream.Collectors;
 @Configuration
 public class RabbitMQConsumerConfig {
 
-    public static final String APPROVED_SELL_QUEUE = "approved.sell.queue";
+    public static final String PROVIDED_RESOURCES_QUEUE = "provided.resources.queue";
+    public static final String RETURNED_RESOURCES_QUEUE = "returned.resources.queue";
 
-    private final ReceiveFromApprovedSellQueueUsecase receiveFromApprovedSellQueueUsecase;
     private final ReceiveFromProvidedResourcesQueueUsecase receiveFromProvidedResourcesQueueUsecase;
     private final ReceiveFromReturnedResourcesQueueUsecase receiveFromReturnedResourcesQueueUsecase;
 
     @Autowired
-    public RabbitMQConsumerConfig(ReceiveFromApprovedSellQueueUsecase receiveFromApprovedSellQueueUsecase,
-                                  ReceiveFromProvidedResourcesQueueUsecase receiveFromProvidedResourcesQueueUsecase,
+    public RabbitMQConsumerConfig(ReceiveFromProvidedResourcesQueueUsecase receiveFromProvidedResourcesQueueUsecase,
                                   ReceiveFromReturnedResourcesQueueUsecase receiveFromReturnedResourcesQueueUsecase) {
-        this.receiveFromApprovedSellQueueUsecase = receiveFromApprovedSellQueueUsecase;
         this.receiveFromProvidedResourcesQueueUsecase = receiveFromProvidedResourcesQueueUsecase;
         this.receiveFromReturnedResourcesQueueUsecase = receiveFromReturnedResourcesQueueUsecase;
     }
@@ -70,7 +68,7 @@ public class RabbitMQConsumerConfig {
                 .collect(Collectors.toList());
     }
 
-    @RabbitListener(queues = {NEW_STOCK_QUEUE})
+    @RabbitListener(queues = {PROVIDED_RESOURCES_QUEUE})
     public void listenerOfNewStockQueue(String messageReceived) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.readValue(messageReceived, Map.class);
@@ -89,7 +87,7 @@ public class RabbitMQConsumerConfig {
         newStockMessageReciever.receiveMessage(newPurchaseInvoice);
     }
 
-    @RabbitListener(queues = {APPROVED_SELL_QUEUE})
+    @RabbitListener(queues = {RETURNED_RESOURCES_QUEUE})
     public void listenerOfApprovedSellQueue(String messageReceived) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.readValue(messageReceived, Map.class);

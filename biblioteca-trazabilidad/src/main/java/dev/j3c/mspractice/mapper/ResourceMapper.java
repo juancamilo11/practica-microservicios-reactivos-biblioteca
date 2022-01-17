@@ -10,7 +10,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
-public class ResourceLoaningMapper {
+public class ResourceMapper {
 
     public Function<ResourceLoaning, ResourceLoaningDto> mapFromEntityToDto() {
         return (ResourceLoaning resourceLoaning) -> ResourceLoaningDto.builder()
