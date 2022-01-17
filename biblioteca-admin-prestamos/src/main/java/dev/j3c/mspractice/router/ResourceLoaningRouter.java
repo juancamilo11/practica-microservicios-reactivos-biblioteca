@@ -57,7 +57,7 @@ public class ResourceLoaningRouter {
 
     @Bean
     public RouterFunction<ServerResponse> deleteLoanForResourceDevolutionRoute(DeleteResourceLoanUsecase deleteResourceLoanUsecase) {
-        return route(DELETE("/delete-user/{id}")
+        return route(DELETE("/delete-resource-loan/{id}")
                 .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
