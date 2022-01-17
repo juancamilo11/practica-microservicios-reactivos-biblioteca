@@ -7,6 +7,7 @@ import dev.j3c.mspractice.usecases.interfaces.ReceiveFromProvidedResourcesQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import reactor.core.publisher.Mono;
 
 @Service
 @Validated
@@ -20,7 +21,8 @@ public class ReceiveFromProvidedResourcesQueueUsecase implements ReceiveFromProv
         this.resourceMapper = resourceMapper;
     }
 
-    public void receiveMessage(ResourceLoaningDto resourceLoaningDto) {
+    @Override
+    public Mono<Void> receiveMessage(ResourceLoaningDto resourceLoaningDto) {
         this.providedResourcesRepository
                 .save(this.resourceMapper
                         .mapFromDtoToEntity()

@@ -1,6 +1,9 @@
 package dev.j3c.mspractice.usecases.interfaces;
 
-public interface ReceiveFromProvidedResourcesQueue {
+import dev.j3c.mspractice.dto.ResourceLoaningDto;
+import reactor.core.publisher.Mono;
 
+public interface ReceiveFromProvidedResourcesQueue {
+    Mono<Void> receiveMessage(ResourceLoaningDto sellStockInvoiceDto);
 }
 
