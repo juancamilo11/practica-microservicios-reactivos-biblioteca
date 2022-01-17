@@ -24,5 +24,6 @@ public class ResourceLoaning {
     private List<LibraryItem> itemsList;
     private String customerId;
     private String customerName;
+    private String type;
 
 }

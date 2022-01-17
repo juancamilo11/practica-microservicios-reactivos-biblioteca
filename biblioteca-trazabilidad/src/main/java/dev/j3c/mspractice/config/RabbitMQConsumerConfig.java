@@ -2,9 +2,8 @@ package dev.j3c.mspractice.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.j3c.mspractice.dto.ResourceLoaningDto;
 import dev.j3c.mspractice.dto.helpers.LibraryItemDto;
-import dev.j3c.mspractice.usecases.ReceiveFromApprovedSellQueueUsecase;
-import dev.j3c.mspractice.usecases.ReceieveFromProvidedResourcesQueueUsecase;
 import dev.j3c.mspractice.usecases.ReceiveFromProvidedResourcesQueueUsecase;
 import dev.j3c.mspractice.usecases.ReceiveFromReturnedResourcesQueueUsecase;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -70,40 +69,40 @@ public class RabbitMQConsumerConfig {
 
     @RabbitListener(queues = {PROVIDED_RESOURCES_QUEUE})
     public void listenerOfNewStockQueue(String messageReceived) throws JsonProcessingException {
+
+        //System.out.println(messageReceived);
+
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.readValue(messageReceived, Map.class);
-        if(map.get("itemsList").toString().equals("[]")) {
-            return;
-        }
-        PurchaseStockInvoiceDto newPurchaseInvoice = new PurchaseStockInvoiceDto(
-                map.get("id").toString(),
-                null,
-                LocalDate.parse(map.get("date").toString()),
-                this.getListItems(map.get("itemsList").toString()),
-                10,
-                map.get("nit").toString(),
-                map.get("providerName").toString()
-        );
-        newStockMessageReciever.receiveMessage(newPurchaseInvoice);
+        if(map.get("itemsList").toString().equals("[]")) return;
+        ResourceLoaningDto resourceLoaningDto = ResourceLoaningDto.builder()
+                .id(map.get("id").toString())
+                .date(LocalDate.parse(map.get("date").toString()))
+                .itemsList(this.getListItems(map.get("itemsList").toString()))
+                .customerId(map.get("customerId").toString())
+                .customerName(map.get("customerName").toString())
+                .type("Resource Provided")
+                .build();
+        receiveFromProvidedResourcesQueueUsecase.receiveMessage(resourceLoaningDto);
     }
 
     @RabbitListener(queues = {RETURNED_RESOURCES_QUEUE})
     public void listenerOfApprovedSellQueue(String messageReceived) throws JsonProcessingException {
+
+        //System.out.println(messageReceived);
+
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.readValue(messageReceived, Map.class);
-        if(map.get("itemsList").toString().equals("[]")) {
-            return;
-        }
-        SellStockInvoiceDto newSellInvoice = new SellStockInvoiceDto(
-                map.get("id").toString(),
-                null,
-                LocalDate.parse(map.get("date").toString()),
-                this.getListItems(map.get("itemsList").toString()),
-                10,
-                map.get("customerId").toString(),
-                map.get("customerName").toString()
-        );
-        approvedSellMessageReciever.receiveMessage(newSellInvoice);
+        if(map.get("itemsList").toString().equals("[]")) return;
+        ResourceLoaningDto resourceLoaningDto = ResourceLoaningDto.builder()
+                .id(map.get("id").toString())
+                .date(LocalDate.parse(map.get("date").toString()))
+                .itemsList(this.getListItems(map.get("itemsList").toString()))
+                .customerId(map.get("customerId").toString())
+                .customerName(map.get("customerName").toString())
+                .type("Resource Returned")
+                .build();
+        receiveFromReturnedResourcesQueueUsecase.receiveMessage(resourceLoaningDto);
     }
 
 }

@@ -22,11 +22,10 @@ public class ReceiveFromProvidedResourcesQueueUsecase implements ReceiveFromProv
     }
 
     @Override
-    public Mono<Void> receiveMessage(ResourceLoaningDto resourceLoaningDto) {
-        this.providedResourcesRepository
+    public void receiveMessage(ResourceLoaningDto resourceLoaningDto) {
+         this.providedResourcesRepository
                 .save(this.resourceMapper
                         .mapFromDtoToEntity()
                         .apply(resourceLoaningDto)).subscribe();
     }
 }
-

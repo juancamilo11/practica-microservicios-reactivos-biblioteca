@@ -24,7 +24,7 @@ public class GetAllProvidedResourcesUsecase implements GetAllProvidedResources {
     @Override
     public Flux<ResourceLoaningDto> get() {
         return this.providedResourcesRepository
-                .findAll()
+                .findAllByType("Resource Provided")
                 .switchIfEmpty(Flux.empty())
                 .map(resourceLoaning -> this.resourceMapper
                         .mapFromEntityToDto()

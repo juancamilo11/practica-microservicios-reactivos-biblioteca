@@ -1,10 +1,8 @@
 package dev.j3c.mspractice.router;
 
 import dev.j3c.mspractice.dto.ResourceLoaningDto;
-import dev.j3c.mspractice.usecases.GetAllApprovedSalesUsecase;
 import dev.j3c.mspractice.usecases.GetAllProvidedResourcesUsecase;
 import dev.j3c.mspractice.usecases.GetAllReturnedResourcesUsecase;
-import dev.j3c.mspractice.usecases.GetApprovedSaleByIdUsecase;
 import dev.j3c.mspractice.usecases.GetProvidedResourceByIdUsecase;
 import dev.j3c.mspractice.usecases.GetReturnedResourceByIdUsecase;
 import org.springframework.context.annotation.Bean;

@@ -25,6 +25,7 @@ public class ResourceMapper {
                         .purchasePrice(libraryItem.getPurchasePrice())
                         .build()).collect(Collectors.toList()))
                 .date(resourceLoaning.getDate())
+                .type(resourceLoaning.getType())
                 .build();
     }
 
@@ -41,6 +42,7 @@ public class ResourceMapper {
                         .purchasePrice(libraryItem.getPurchasePrice())
                         .build()).collect(Collectors.toList()))
                 .date(resourceLoaningDto.getDate())
+                .type(resourceLoaningDto.getType())
                 .build();
     }
 
