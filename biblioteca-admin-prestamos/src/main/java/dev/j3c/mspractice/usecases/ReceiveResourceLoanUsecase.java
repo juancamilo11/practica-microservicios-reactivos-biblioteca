@@ -5,7 +5,7 @@ import dev.j3c.mspractice.dto.ResourceLoaningDto;
 import dev.j3c.mspractice.dto.helpers.LibraryItemDto;
 import dev.j3c.mspractice.mapper.ResourceLoaningMapper;
 import dev.j3c.mspractice.repository.ResourceLoaningRepository;
-import dev.j3c.mspractice.usecases.interfaces.RecieveResourceLoan;
+import dev.j3c.mspractice.usecases.interfaces.ReceiveResourceLoan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +26,14 @@ import java.util.stream.Collectors;
 
 @Service
 @Validated
-public class RecieveResourceLoanUsecase implements RecieveResourceLoan {
+public class ReceiveResourceLoanUsecase implements ReceiveResourceLoan {
 
     private final ResourceLoaningRepository resourceLoaningRepository;
     private final ResourceLoaningMapper resourceLoaningMapper;
 
-    private static final Logger logger = LoggerFactory.getLogger(RecieveResourceLoanUsecase.class);
+    private final PostLoanResourceMessageToRabbitMQUsecase postResourceLoanMessageUsecase;
+
+    private static final Logger logger = LoggerFactory.getLogger(ReceiveResourceLoanUsecase.class);
     @Value("${user.existence.verification.url}")
     private String userVerificationUrl;
 
@@ -39,9 +41,12 @@ public class RecieveResourceLoanUsecase implements RecieveResourceLoan {
     private String stockAvailabilityVerificationUrl;
 
     @Autowired
-    public RecieveResourceLoanUsecase(ResourceLoaningRepository resourceLoaningRepository, ResourceLoaningMapper resourceLoaningMapper) {
+    public ReceiveResourceLoanUsecase(ResourceLoaningRepository resourceLoaningRepository,
+                                      ResourceLoaningMapper resourceLoaningMapper,
+                                      PostLoanResourceMessageToRabbitMQUsecase postResourceLoanMessageUsecase) {
         this.resourceLoaningRepository = resourceLoaningRepository;
         this.resourceLoaningMapper = resourceLoaningMapper;
+        this.postResourceLoanMessageUsecase = postResourceLoanMessageUsecase;
     }
 
     private boolean verifyCustomer(@NotBlank String customerId) {
@@ -87,10 +92,14 @@ public class RecieveResourceLoanUsecase implements RecieveResourceLoan {
     @Override
     public Mono<ResourceLoaningDto> apply(ResourceLoaningDto resourceLoaningDto) {
 
-        if(!verifyCustomer(resourceLoaningDto.getCustomerId()))
-            return Mono.error(new IllegalArgumentException("Error, el usuario con id:" + resourceLoaningDto.getCustomerId() + " no existe en el sistema."));
-        if(!verifyResourcesDisponibility(resourceLoaningDto.getItemsList()))
-            return Mono.error(new IllegalArgumentException("Error, no hay disponibilidad de uno o varios recursos."));
+//        if(!verifyCustomer(resourceLoaningDto.getCustomerId()))
+//            return Mono.error(new IllegalArgumentException("Error, el usuario con id:" + resourceLoaningDto.getCustomerId() + " no existe en el sistema."));
+//        if(!verifyResourcesDisponibility(resourceLoaningDto.getItemsList()))
+//            return Mono.error(new IllegalArgumentException("Error, no hay disponibilidad de uno o varios recursos."));
+
+        //Send message to RabbitMQ
+        this.postResourceLoanMessageUsecase.accept(resourceLoaningDto);
+
         return this.resourceLoaningRepository
                 .save(this.resourceLoaningMapper
                         .mapFromDtoToEntity()

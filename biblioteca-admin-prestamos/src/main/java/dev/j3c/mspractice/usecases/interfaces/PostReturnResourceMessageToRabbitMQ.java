@@ -4,6 +4,6 @@ import dev.j3c.mspractice.dto.ResourceLoaningDto;
 import reactor.core.publisher.Mono;
 
 @FunctionalInterface
-public interface RecieveResourceLoan {
-    Mono<ResourceLoaningDto> apply(ResourceLoaningDto resourceLoaningDto);
+public interface PostReturnResourceMessageToRabbitMQ {
+    Mono<Void> accept(Mono<ResourceLoaningDto> resourceLoaningDto);
 }
