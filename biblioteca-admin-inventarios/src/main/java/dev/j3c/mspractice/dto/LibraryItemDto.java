@@ -11,7 +11,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(toBuilder = true)
 public class LibraryItemDto {
     @NotBlank
     private String id;

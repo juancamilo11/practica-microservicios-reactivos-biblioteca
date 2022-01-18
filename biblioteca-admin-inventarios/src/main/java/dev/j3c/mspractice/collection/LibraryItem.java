@@ -9,7 +9,6 @@ import org.springframework.data.annotation.Id;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(toBuilder = true)
 public class LibraryItem {
     @Id
     private String id;
