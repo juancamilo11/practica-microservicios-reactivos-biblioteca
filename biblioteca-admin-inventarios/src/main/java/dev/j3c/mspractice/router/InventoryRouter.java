@@ -99,7 +99,7 @@ public class InventoryRouter {
 
     @Bean
     public RouterFunction<ServerResponse> deleteLibraryItemsForSaleByIdRoute(DeleteLibraryItemsForLoaningByidUsecase deleteLibraryItemsForLoaningByidUsecase) {
-        return route(DELETE("/delete-resource-loan/{id}")
+        return route(DELETE("/delete-library-item-for-sale/{id}")
                 .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
