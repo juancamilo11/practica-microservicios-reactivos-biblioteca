@@ -1,9 +1,8 @@
 package dev.j3c.mspractice.router;
 
 import dev.j3c.mspractice.dto.LibraryItemForLoanDto;
-import dev.j3c.mspractice.usecases.AddNewLibraryItemForLoaningUsecase;
-import dev.j3c.mspractice.usecases.GetAllLibraryItemsForLoaningUsecase;
-import dev.j3c.mspractice.usecases.GetLibraryItemForLoaningByIdUsecase;
+import dev.j3c.mspractice.dto.LibraryItemForSaleDto;
+import dev.j3c.mspractice.usecases.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -21,7 +20,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 public class InventoryRouter {
     @Bean
     public RouterFunction<ServerResponse> getAllLibraryItemsForLoansRoute(GetAllLibraryItemsForLoaningUsecase getAllLibraryItemsForLoaningUsecase) {
-        return route(GET("/get-all-library-items-for-loans")
+        return route(GET("/get-all-library-items-for-loaning")
                 .and(accept(MediaType.APPLICATION_JSON)), request ->
                 ServerResponse
                         .ok()
@@ -30,8 +29,8 @@ public class InventoryRouter {
     }
 
     @Bean
-    public RouterFunction<ServerResponse> getAllResourceLoansByCustomerIdRoute(GetLibraryItemForLoaningByIdUsecase getLibraryItemForLoaningByIdUsecase) {
-        return route(GET("/get-library-item-form-loan/{id}")
+    public RouterFunction<ServerResponse> getAllLibraryItemsForLoansByCustomerIdRoute(GetLibraryItemForLoaningByIdUsecase getLibraryItemForLoaningByIdUsecase) {
+        return route(GET("/get-library-item-for-loaning/{id}")
                 .and(accept(MediaType.APPLICATION_JSON)), request ->
                 ServerResponse
                         .ok()
@@ -47,18 +46,63 @@ public class InventoryRouter {
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(result));
-        return route(POST("/register-library-item-for-loan")
+        return route(POST("/register-library-item-for-loaning")
                 .and(accept(MediaType.APPLICATION_JSON)), request -> request
                 .bodyToMono(LibraryItemForLoanDto.class)
                 .flatMap(executor));
     }
 
-//    @Bean
-//    public RouterFunction<ServerResponse> deleteLibraryItemsByIdRoute(DeleteLibraryItemsByidUsecase deleteLibraryItemsByidUsecase) {
-//        return route(DELETE("/delete-resource-loan/{id}")
-//                .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
-//                .ok()
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .body(BodyInserters.fromPublisher(deleteLibraryItemsByidUsecase.accept(request.pathVariable("id")),Void.class)));
-//    }
+    @Bean
+    public RouterFunction<ServerResponse> deleteLibraryItemsForLoaningByIdRoute(DeleteLibraryItemsForLoaningByidUsecase deleteLibraryItemsForLoaningByidUsecase) {
+        return route(DELETE("/delete-library-item-for-loaning/{id}")
+                .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromPublisher(deleteLibraryItemsForLoaningByidUsecase.accept(request.pathVariable("id")),Void.class)));
+    }
+
+
+
+    @Bean
+    public RouterFunction<ServerResponse> getAllLibraryItemsForSaleRoute(GetAllLibraryItemsForSaleUsecase getAllLibraryItemsForSaleUsecase) {
+        return route(GET("/get-all-library-items-for-sale")
+                .and(accept(MediaType.APPLICATION_JSON)), request ->
+                ServerResponse
+                        .ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(getAllLibraryItemsForSaleUsecase.get(), LibraryItemForSaleDto.class)));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> getAllLibraryItemsForSaleByCustomerIdRoute(GetLibraryItemForSaleByIdUsecase getLibraryItemForSaleByIdUsecase) {
+        return route(GET("/get-library-item-for-sale/{id}")
+                .and(accept(MediaType.APPLICATION_JSON)), request ->
+                ServerResponse
+                        .ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(BodyInserters.fromPublisher(getLibraryItemForSaleByIdUsecase.apply(request.pathVariable("id")), LibraryItemForSaleDto.class)));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> registerNewLibraryItemsForSaleRoute(AddNewLibraryItemForSaleUsecase addNewLibraryItemForSaleUsecase) {
+        Function<LibraryItemForSaleDto, Mono<ServerResponse>> executor = (LibraryItemForSaleDto libraryItemForSaleDto) ->  addNewLibraryItemForSaleUsecase
+                .apply(libraryItemForSaleDto)
+                .flatMap(result -> ServerResponse
+                        .ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(result));
+        return route(POST("/register-library-item-for-sale")
+                .and(accept(MediaType.APPLICATION_JSON)), request -> request
+                .bodyToMono(LibraryItemForSaleDto.class)
+                .flatMap(executor));
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> deleteLibraryItemsForSaleByIdRoute(DeleteLibraryItemsForLoaningByidUsecase deleteLibraryItemsForLoaningByidUsecase) {
+        return route(DELETE("/delete-resource-loan/{id}")
+                .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromPublisher(deleteLibraryItemsForLoaningByidUsecase.accept(request.pathVariable("id")),Void.class)));
+    }
 }
