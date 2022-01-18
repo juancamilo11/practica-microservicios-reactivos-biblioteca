@@ -5,7 +5,6 @@ import dev.j3c.mspractice.dto.LibraryItemForLoanDto;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 public class LibraryItemsForLoanMapper {

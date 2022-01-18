@@ -1,13 +1,10 @@
 package dev.j3c.mspractice.mapper;
 
-import dev.j3c.mspractice.collection.LibraryItemForLoan;
 import dev.j3c.mspractice.collection.LibraryItemForSale;
-import dev.j3c.mspractice.dto.LibraryItemForLoanDto;
 import dev.j3c.mspractice.dto.LibraryItemForSaleDto;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 public class LibraryItemsForSaleMapper {

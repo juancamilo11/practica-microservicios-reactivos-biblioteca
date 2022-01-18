@@ -15,7 +15,6 @@ import reactor.core.publisher.Mono;
 import java.util.function.Function;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
-import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
@@ -54,12 +53,12 @@ public class InventoryRouter {
                 .flatMap(executor));
     }
 
-    @Bean
-    public RouterFunction<ServerResponse> deleteLibraryItemsByIdRoute(DeleteLibraryItemsByidUsecase deleteLibraryItemsByidUsecase) {
-        return route(DELETE("/delete-resource-loan/{id}")
-                .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromPublisher(deleteLibraryItemsByidUsecase.accept(request.pathVariable("id")),Void.class)));
-    }
+//    @Bean
+//    public RouterFunction<ServerResponse> deleteLibraryItemsByIdRoute(DeleteLibraryItemsByidUsecase deleteLibraryItemsByidUsecase) {
+//        return route(DELETE("/delete-resource-loan/{id}")
+//                .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
+//                .ok()
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .body(BodyInserters.fromPublisher(deleteLibraryItemsByidUsecase.accept(request.pathVariable("id")),Void.class)));
+//    }
 }
