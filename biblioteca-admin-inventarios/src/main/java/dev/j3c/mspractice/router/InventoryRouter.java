@@ -4,6 +4,8 @@ import dev.j3c.mspractice.dto.CanonicoLibraryItemDto;
 import dev.j3c.mspractice.dto.LibraryItemForLoanDto;
 import dev.j3c.mspractice.dto.LibraryItemForSaleDto;
 import dev.j3c.mspractice.usecases.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +29,8 @@ public class InventoryRouter {
     @Autowired
     private VerifyItemsAvailabilityForLoaningUsecase verifyItemsAvailabilityForLoaningUsecase;
 
+    private static Logger logger = LoggerFactory.getLogger(InventoryRouter.class);
+
     @Bean
     public RouterFunction<ServerResponse> getAllLibraryItemsForLoansRoute(GetAllLibraryItemsForLoaningUsecase getAllLibraryItemsForLoaningUsecase) {
         return route(GET("/get-all-library-items-for-loaning")
@@ -34,7 +38,8 @@ public class InventoryRouter {
                 ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(BodyInserters.fromPublisher(getAllLibraryItemsForLoaningUsecase.get(), LibraryItemForLoanDto.class)));
+                        .body(BodyInserters.fromPublisher(getAllLibraryItemsForLoaningUsecase.get()
+                                .doOnNext(result -> logger.info("[MS-ADMIN_INVENTORY] Get All Library Items For Loaning " + result)), LibraryItemForLoanDto.class)));
     }
 
     @Bean
@@ -44,7 +49,8 @@ public class InventoryRouter {
                 ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(BodyInserters.fromPublisher(getLibraryItemForLoaningByIdUsecase.apply(request.pathVariable("id")), LibraryItemForLoanDto.class)));
+                        .body(BodyInserters.fromPublisher(getLibraryItemForLoaningByIdUsecase.apply(request.pathVariable("id"))
+                                .doOnNext(result -> logger.info("[MS-ADMIN_INVENTORY] Get All Library Items For Loaning By Customer Id " + result)), LibraryItemForLoanDto.class)));
     }
 
     @Bean
@@ -58,7 +64,8 @@ public class InventoryRouter {
         return route(POST("/register-library-item-for-loaning")
                 .and(accept(MediaType.APPLICATION_JSON)), request -> request
                 .bodyToMono(LibraryItemForLoanDto.class)
-                .flatMap(executor));
+                .flatMap(executor)
+                .doOnNext(result -> logger.info("[MS-ADMIN_INVENTORY] Register New Library Item For Loaning " + result)));
     }
 
     @Bean
@@ -67,7 +74,8 @@ public class InventoryRouter {
                 .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromPublisher(deleteLibraryItemsForLoaningByidUsecase.accept(request.pathVariable("id")),Void.class)));
+                .body(BodyInserters.fromPublisher(deleteLibraryItemsForLoaningByidUsecase.accept(request.pathVariable("id"))
+                        .doOnNext(result -> logger.info("[MS-ADMIN_INVENTORY] Delete Library Items For Loaning By Id " + result)), Void.class)));
     }
 
 
@@ -79,7 +87,8 @@ public class InventoryRouter {
                 ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(BodyInserters.fromPublisher(getAllLibraryItemsForSaleUsecase.get(), LibraryItemForSaleDto.class)));
+                        .body(BodyInserters.fromPublisher(getAllLibraryItemsForSaleUsecase.get()
+                                .doOnNext(result -> logger.info("[MS-ADMIN_INVENTORY] Get All Library Items For Sale " + result)), LibraryItemForSaleDto.class)));
     }
 
     @Bean
@@ -89,7 +98,8 @@ public class InventoryRouter {
                 ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(BodyInserters.fromPublisher(getLibraryItemForSaleByIdUsecase.apply(request.pathVariable("id")), LibraryItemForSaleDto.class)));
+                        .body(BodyInserters.fromPublisher(getLibraryItemForSaleByIdUsecase.apply(request.pathVariable("id"))
+                                .doOnNext(result -> logger.info("[MS-ADMIN_INVENTORY] Get All Library Items For Sale By Customer Id " + result)), LibraryItemForSaleDto.class)));
     }
 
     @Bean
@@ -103,7 +113,8 @@ public class InventoryRouter {
         return route(POST("/register-library-item-for-sale")
                 .and(accept(MediaType.APPLICATION_JSON)), request -> request
                 .bodyToMono(LibraryItemForSaleDto.class)
-                .flatMap(executor));
+                .flatMap(executor)
+                .doOnNext(result -> logger.info("[MS-ADMIN_INVENTORY] Register new Library Item For Sale " + result)));
     }
 
     @Bean
@@ -112,13 +123,15 @@ public class InventoryRouter {
                 .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromPublisher(deleteLibraryItemsForLoaningByidUsecase.accept(request.pathVariable("id")),Void.class)));
+                .body(BodyInserters.fromPublisher(deleteLibraryItemsForLoaningByidUsecase.accept(request.pathVariable("id"))
+                        .doOnNext(result -> logger.info("[MS-ADMIN_INVENTORY] Delete Library Items For Sale By Id " + result)), Void.class)));
     }
 
     @PostMapping("/verify-availability-for-loaning")
     public Mono<Boolean> verifyInventoryAvailabilityRoute(Map<String, List<CanonicoLibraryItemDto>> itemsGroupedById) {
         return this.verifyItemsAvailabilityForLoaningUsecase
-                .apply(itemsGroupedById);
+                .apply(itemsGroupedById)
+                .doOnNext(result -> logger.info("[MS-ADMIN_INVENTORY] Verify Items Availability For Loaning " + result));
     }
 
 }
