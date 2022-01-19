@@ -73,7 +73,7 @@ public class RabbitMQConsumerConfig {
 
     @RabbitListener(queues = {NEW_STOCK_QUEUE})
     public void listenerOfNewStockQueue(String messageReceived) throws JsonProcessingException {
-        logger.info("[MS-INVOICING] Listening " + NEW_STOCK_QUEUE + " queue");
+        logger.info("[MS-INVOICING] Listening to " + NEW_STOCK_QUEUE + " Queue");
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.readValue(messageReceived, Map.class);
         if(map.get("itemsList").toString().equals("[]")) {
@@ -93,7 +93,7 @@ public class RabbitMQConsumerConfig {
 
     @RabbitListener(queues = {APPROVED_SELL_QUEUE})
     public void listenerOfApprovedSellQueue(String messageReceived) throws JsonProcessingException {
-        logger.info("[MS-INVOICING] Listening " + APPROVED_SELL_QUEUE + " queue");
+        logger.info("[MS-INVOICING] Listening to " + APPROVED_SELL_QUEUE + " Queue");
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.readValue(messageReceived, Map.class);
         if(map.get("itemsList").toString().equals("[]")) {

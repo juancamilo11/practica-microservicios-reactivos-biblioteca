@@ -6,6 +6,8 @@ import dev.j3c.mspractice.dto.ResourceLoaningDto;
 import dev.j3c.mspractice.dto.helpers.LibraryItemDto;
 import dev.j3c.mspractice.usecases.ReceiveFromProvidedResourcesQueueUsecase;
 import dev.j3c.mspractice.usecases.ReceiveFromReturnedResourcesQueueUsecase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +27,8 @@ public class RabbitMQConsumerConfig {
 
     private final ReceiveFromProvidedResourcesQueueUsecase receiveFromProvidedResourcesQueueUsecase;
     private final ReceiveFromReturnedResourcesQueueUsecase receiveFromReturnedResourcesQueueUsecase;
+
+    private static final Logger logger = LoggerFactory.getLogger(RabbitMQConsumerConfig.class);
 
     @Autowired
     public RabbitMQConsumerConfig(ReceiveFromProvidedResourcesQueueUsecase receiveFromProvidedResourcesQueueUsecase,
@@ -69,9 +73,7 @@ public class RabbitMQConsumerConfig {
 
     @RabbitListener(queues = {PROVIDED_RESOURCES_QUEUE})
     public void listenerOfNewStockQueue(String messageReceived) throws JsonProcessingException {
-
-        //System.out.println(messageReceived);
-
+        logger.info("[MS-TRACEABILITY] Listening to " + PROVIDED_RESOURCES_QUEUE + "Queue");
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.readValue(messageReceived, Map.class);
         if(map.get("itemsList").toString().equals("[]")) return;
@@ -88,9 +90,7 @@ public class RabbitMQConsumerConfig {
 
     @RabbitListener(queues = {RETURNED_RESOURCES_QUEUE})
     public void listenerOfApprovedSellQueue(String messageReceived) throws JsonProcessingException {
-
-        //System.out.println(messageReceived);
-
+        logger.info("[MS-TRACEABILITY] Listening to " + RETURNED_RESOURCES_QUEUE + "Queue");
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.readValue(messageReceived, Map.class);
         if(map.get("itemsList").toString().equals("[]")) return;

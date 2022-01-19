@@ -5,6 +5,8 @@ import dev.j3c.mspractice.usecases.GetAllProvidedResourcesUsecase;
 import dev.j3c.mspractice.usecases.GetAllReturnedResourcesUsecase;
 import dev.j3c.mspractice.usecases.GetProvidedResourceByIdUsecase;
 import dev.j3c.mspractice.usecases.GetReturnedResourceByIdUsecase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -18,6 +20,9 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 
 @Configuration
 public class TraceabilityRouter {
+
+    private static final Logger logger = LoggerFactory.getLogger(TraceabilityRouter.class);
+
     @Bean
     public RouterFunction<ServerResponse> getAllProvidedResourcesRoute(GetAllProvidedResourcesUsecase getAllProvidedResourcesUsecase) {
         return route(GET("/get-all-provided-resources")
@@ -25,7 +30,8 @@ public class TraceabilityRouter {
                 ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(BodyInserters.fromPublisher(getAllProvidedResourcesUsecase.get(), ResourceLoaningDto.class)));
+                        .body(BodyInserters.fromPublisher(getAllProvidedResourcesUsecase.get()
+                                .doOnNext(result -> logger.info("[MS-TRACEABILITY] Get All Provided Resources " + result)), ResourceLoaningDto.class)));
     }
 
     @Bean
@@ -35,7 +41,8 @@ public class TraceabilityRouter {
                 ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(BodyInserters.fromPublisher(getProvidedResourceByIdUsecase.apply(request.pathVariable("loanId")), ResourceLoaningDto.class)));
+                        .body(BodyInserters.fromPublisher(getProvidedResourceByIdUsecase.apply(request.pathVariable("loanId"))
+                                .doOnNext(result -> logger.info("[MS-TRACEABILITY] Get Provided Resource By Loan Id " + result)), ResourceLoaningDto.class)));
     }
 
     @Bean
@@ -45,7 +52,8 @@ public class TraceabilityRouter {
                 ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(BodyInserters.fromPublisher(getAllReturnedResourcesUsecase.get(), ResourceLoaningDto.class)));
+                        .body(BodyInserters.fromPublisher(getAllReturnedResourcesUsecase.get()
+                                .doOnNext(result -> logger.info("[MS-TRACEABILITY] Get All Returned Resources " + result)), ResourceLoaningDto.class)));
     }
 
     @Bean
@@ -55,7 +63,8 @@ public class TraceabilityRouter {
                 ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(BodyInserters.fromPublisher(getReturnedResourceByIdUsecase.apply(request.pathVariable("loanId")), ResourceLoaningDto.class)));
+                        .body(BodyInserters.fromPublisher(getReturnedResourceByIdUsecase.apply(request.pathVariable("loanId"))
+                                .doOnNext(result -> logger.info("[MS-TRACEABILITY] Get Returned Resource By Id " + result)), ResourceLoaningDto.class)));
     }
 
 }
