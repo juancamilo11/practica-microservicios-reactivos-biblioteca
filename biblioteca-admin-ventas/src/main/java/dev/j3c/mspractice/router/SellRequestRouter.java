@@ -2,6 +2,8 @@ package dev.j3c.mspractice.router;
 
 import dev.j3c.mspractice.dto.SellRequestDto;
 import dev.j3c.mspractice.usecases.ReceiveSellRequestUsecase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -18,8 +20,10 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @Configuration
 public class SellRequestRouter {
 
+    private static final Logger logger = LoggerFactory.getLogger(SellRequestRouter.class);
+
     @Bean
-    public RouterFunction<ServerResponse> addSellStockInvoiceRoute(ReceiveSellRequestUsecase receiveSellRequestUsecase) {
+    public RouterFunction<ServerResponse> registerSellRequestRoute(ReceiveSellRequestUsecase receiveSellRequestUsecase) {
         Function<SellRequestDto, Mono<ServerResponse>> executor = (SellRequestDto sellRequestDto) ->  receiveSellRequestUsecase
                 .apply(sellRequestDto)
                 .flatMap(sellRequestResult -> ServerResponse
@@ -29,6 +33,7 @@ public class SellRequestRouter {
         return route(POST("/add-sell-request")
                 .and(accept(MediaType.APPLICATION_JSON)), request -> request
                 .bodyToMono(SellRequestDto.class)
-                .flatMap(executor));
+                .flatMap(executor)
+                .doOnNext(result -> logger.info("[MS-ADMIN_SALES] Register Sale Request " + result)));
     }
 }

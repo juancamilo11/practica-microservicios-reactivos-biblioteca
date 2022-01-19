@@ -28,7 +28,10 @@ public class RabbitMQPublisherConfig {
 
     @Bean
     public Binding binding() {
-        return BindingBuilder.bind(this.queue()).to(this.topicExchange()).with(ROUTING_KEY);
+        return BindingBuilder
+                .bind(this.queue())
+                .to(this.topicExchange())
+                .with(ROUTING_KEY);
     }
 
 }
