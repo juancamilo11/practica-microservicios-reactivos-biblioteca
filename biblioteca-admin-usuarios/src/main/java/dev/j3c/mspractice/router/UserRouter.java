@@ -24,9 +24,9 @@ public class UserRouter {
 
     @Bean
     public RouterFunction<ServerResponse> addUserRoute(AddUserUsecase addUserUsecase) {
-        logger.info("Se ha recibido la petición de agregar usuario");
         Function<UserDto, Mono<ServerResponse>> executor = (UserDto userDto) ->  addUserUsecase
                 .apply(userDto)
+                .doOnNext(user -> logger.info("[MS-ADMIN_USERS] Add New User " + user))
                 .flatMap(user -> ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
@@ -43,7 +43,8 @@ public class UserRouter {
                 .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromPublisher(getUserByIdUsecase.apply(request.pathVariable("id")),UserDto.class)));
+                .body(BodyInserters.fromPublisher(getUserByIdUsecase.apply(request.pathVariable("id"))
+                        .doOnNext(user -> logger.info("[MS-ADMIN_USERS] Get User By Id " + user)), UserDto.class)));
     }
 
     @Bean
@@ -53,7 +54,8 @@ public class UserRouter {
                 ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(BodyInserters.fromPublisher(getAllUsersUsecase.get(),UserDto.class)));
+                        .body(BodyInserters.fromPublisher(getAllUsersUsecase.get()
+                                .doOnNext(user -> logger.info("[MS-ADMIN_USERS] Get User All Users " + user)), UserDto.class)));
     }
 
     @Bean
@@ -67,7 +69,8 @@ public class UserRouter {
         return route(PUT("/update-user")
                 .and(accept(MediaType.APPLICATION_JSON)), request -> request
                 .bodyToMono(UserDto.class)
-                .flatMap(executor));
+                .flatMap(executor)
+                .doOnNext(user -> logger.info("[MS-ADMIN_USERS] Update User By Id " + user)));
     }
 
     @Bean
@@ -76,6 +79,7 @@ public class UserRouter {
                 .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromPublisher(deleteUserByIdUsecase.accept(request.pathVariable("id")),Void.class)));
+                .body(BodyInserters.fromPublisher(deleteUserByIdUsecase.accept(request.pathVariable("id"))
+                        .doOnNext(user -> logger.info("[MS-ADMIN_USERS] Get User By Id" + user)), Void.class)));
     }
 }
