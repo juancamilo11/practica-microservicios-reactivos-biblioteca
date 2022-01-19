@@ -5,6 +5,8 @@ import dev.j3c.mspractice.usecases.DeleteResourceLoanUsecase;
 import dev.j3c.mspractice.usecases.GetAllResourceLoansUsecase;
 import dev.j3c.mspractice.usecases.ReceiveResourceLoanUsecase;
 import dev.j3c.mspractice.usecases.interfaces.GetResourceLoanByCustomerId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -21,6 +23,8 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @Configuration
 public class ResourceLoaningRouter {
 
+    private static Logger logger = LoggerFactory.getLogger(ResourceLoaningRouter.class);
+
     @Bean
     public RouterFunction<ServerResponse> getAllResourceLoansRoute(GetAllResourceLoansUsecase getAllResourceLoansUsecase) {
         return route(GET("/get-all-active-resource-loans")
@@ -28,7 +32,8 @@ public class ResourceLoaningRouter {
                 ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(BodyInserters.fromPublisher(getAllResourceLoansUsecase.get(), ResourceLoaningDto.class)));
+                        .body(BodyInserters.fromPublisher(getAllResourceLoansUsecase.get()
+                                .doOnNext(result -> logger.info("[MS-ADMIN_LOANS] Get All Resource Loans " + result)), ResourceLoaningDto.class)));
     }
 
     @Bean
@@ -38,7 +43,8 @@ public class ResourceLoaningRouter {
                 ServerResponse
                         .ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(BodyInserters.fromPublisher(getResourceLoanByCustomerId.apply(request.pathVariable("customerId")), ResourceLoaningDto.class)));
+                        .body(BodyInserters.fromPublisher(getResourceLoanByCustomerId.apply(request.pathVariable("customerId"))
+                                .doOnNext(result -> logger.info("[MS-ADMIN_LOANS] Get All Resource Loans By Customer Id" + result)), ResourceLoaningDto.class)));
     }
 
     @Bean
@@ -52,7 +58,8 @@ public class ResourceLoaningRouter {
         return route(POST("/register-resource-loan")
                 .and(accept(MediaType.APPLICATION_JSON)), request -> request
                 .bodyToMono(ResourceLoaningDto.class)
-                .flatMap(executor));
+                .flatMap(executor)
+                .doOnNext(result -> logger.info("[MS-ADMIN_LOANS] Register New Resource Loan " + result)));
     }
 
     @Bean
@@ -61,7 +68,8 @@ public class ResourceLoaningRouter {
                 .and(accept(MediaType.APPLICATION_JSON)), request -> ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromPublisher(deleteResourceLoanUsecase.accept(request.pathVariable("id")),Void.class)));
+                .body(BodyInserters.fromPublisher(deleteResourceLoanUsecase.accept(request.pathVariable("id"))
+                        .doOnNext(result -> logger.info("[MS-ADMIN_LOANS] Delete Loan For Resource Devolution " + result)), Void.class)));
     }
 
 

@@ -35,12 +35,18 @@ public class RabbitMQPublisherConfig {
 
     @Bean
     public Binding providedResourcesToQueueBinding() {
-        return BindingBuilder.bind(this.providedResourcesQueue()).to(this.topicExchange()).with(PROVIDED_RESOURCES_ROUTING_KEY);
+        return BindingBuilder
+                .bind(this.providedResourcesQueue())
+                .to(this.topicExchange())
+                .with(PROVIDED_RESOURCES_ROUTING_KEY);
     }
 
     @Bean
     public Binding returnedResourcesToQueueBinding() {
-        return BindingBuilder.bind(this.providedResourcesQueue()).to(this.topicExchange()).with(RETURNED_RESOURCES_ROUTING_KEY);
+        return BindingBuilder
+                .bind(this.providedResourcesQueue())
+                .to(this.topicExchange())
+                .with(RETURNED_RESOURCES_ROUTING_KEY);
     }
 
 }
