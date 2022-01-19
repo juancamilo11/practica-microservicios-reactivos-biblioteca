@@ -1,16 +1,21 @@
 package dev.j3c.mspractice.router;
 
+import dev.j3c.mspractice.dto.CanonicoLibraryItemDto;
 import dev.j3c.mspractice.dto.LibraryItemForLoanDto;
 import dev.j3c.mspractice.dto.LibraryItemForSaleDto;
 import dev.j3c.mspractice.usecases.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import static org.springframework.web.reactive.function.server.RequestPredicates.*;
@@ -18,6 +23,10 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 
 @Configuration
 public class InventoryRouter {
+
+    @Autowired
+    private VerifyItemsAvailabilityForLoaningUsecase verifyItemsAvailabilityForLoaningUsecase;
+
     @Bean
     public RouterFunction<ServerResponse> getAllLibraryItemsForLoansRoute(GetAllLibraryItemsForLoaningUsecase getAllLibraryItemsForLoaningUsecase) {
         return route(GET("/get-all-library-items-for-loaning")
@@ -105,4 +114,11 @@ public class InventoryRouter {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromPublisher(deleteLibraryItemsForLoaningByidUsecase.accept(request.pathVariable("id")),Void.class)));
     }
+
+    @PostMapping("/verify-availability-for-loaning")
+    public Mono<Boolean> verifyInventoryAvailabilityRoute(Map<String, List<CanonicoLibraryItemDto>> itemsGroupedById) {
+        return this.verifyItemsAvailabilityForLoaningUsecase
+                .apply(itemsGroupedById);
+    }
+
 }

@@ -66,13 +66,13 @@ public class ReceiveResourceLoanUsecase implements ReceiveResourceLoan {
         return userExistence;
     }
 
-    private boolean verifyResourcesDisponibility(List<LibraryItemDto> itemsList) {
-        Map<String, List<LibraryItemDto>> mapResourcesGrupedByResourceId = itemsList.stream().collect(Collectors.groupingBy(LibraryItemDto::getId));
+    private boolean verifyResourcesAvailability(List<LibraryItemDto> itemsList) {
+        Map<String, List<LibraryItemDto>> mapResourcesGroupedByResourceId = itemsList.stream().collect(Collectors.groupingBy(LibraryItemDto::getId));
         Gson gson = new Gson();
         HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest httpRequest = HttpRequest
                 .newBuilder()
-                .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(mapResourcesGrupedByResourceId)))
+                .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(mapResourcesGroupedByResourceId)))
                 .uri(URI.create(stockAvailabilityVerificationUrl))
                 .build();
         boolean stockVerificationSuccessful = false;
@@ -92,10 +92,10 @@ public class ReceiveResourceLoanUsecase implements ReceiveResourceLoan {
     @Override
     public Mono<ResourceLoaningDto> apply(ResourceLoaningDto resourceLoaningDto) {
 
-//        if(!verifyCustomer(resourceLoaningDto.getCustomerId()))
-//            return Mono.error(new IllegalArgumentException("Error, el usuario con id:" + resourceLoaningDto.getCustomerId() + " no existe en el sistema."));
-//        if(!verifyResourcesDisponibility(resourceLoaningDto.getItemsList()))
-//            return Mono.error(new IllegalArgumentException("Error, no hay disponibilidad de uno o varios recursos."));
+        if(!verifyCustomer(resourceLoaningDto.getCustomerId()))
+            return Mono.error(new IllegalArgumentException("Error, el usuario con id:" + resourceLoaningDto.getCustomerId() + " no existe en el sistema."));
+        if(!verifyResourcesAvailability(resourceLoaningDto.getItemsList()))
+            return Mono.error(new IllegalArgumentException("Error, no hay disponibilidad de uno o varios recursos."));
 
         //Send message to RabbitMQ
         this.postResourceLoanMessageUsecase.accept(resourceLoaningDto);
