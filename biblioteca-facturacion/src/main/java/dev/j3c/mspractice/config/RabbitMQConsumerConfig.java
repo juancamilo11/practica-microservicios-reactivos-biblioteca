@@ -7,6 +7,8 @@ import dev.j3c.mspractice.dto.SellStockInvoiceDto;
 import dev.j3c.mspractice.dto.helpers.LibraryItemDto;
 import dev.j3c.mspractice.usecases.RecieveFromApprovedSellQueueUsecase;
 import dev.j3c.mspractice.usecases.RecieveFromNewStockQueueUsecase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +28,8 @@ public class RabbitMQConsumerConfig {
 
     private final RecieveFromApprovedSellQueueUsecase approvedSellMessageReciever;
     private final RecieveFromNewStockQueueUsecase newStockMessageReciever;
+
+    private static final Logger logger = LoggerFactory.getLogger(RabbitMQConsumerConfig.class);
 
     @Autowired
     public RabbitMQConsumerConfig(RecieveFromApprovedSellQueueUsecase approvedSellMessageReciever, RecieveFromNewStockQueueUsecase newStockMessageReciever) {
@@ -69,6 +73,7 @@ public class RabbitMQConsumerConfig {
 
     @RabbitListener(queues = {NEW_STOCK_QUEUE})
     public void listenerOfNewStockQueue(String messageReceived) throws JsonProcessingException {
+        logger.info("[MS-INVOICING] Listening " + NEW_STOCK_QUEUE + " queue");
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.readValue(messageReceived, Map.class);
         if(map.get("itemsList").toString().equals("[]")) {
@@ -88,6 +93,7 @@ public class RabbitMQConsumerConfig {
 
     @RabbitListener(queues = {APPROVED_SELL_QUEUE})
     public void listenerOfApprovedSellQueue(String messageReceived) throws JsonProcessingException {
+        logger.info("[MS-INVOICING] Listening " + APPROVED_SELL_QUEUE + " queue");
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> map = mapper.readValue(messageReceived, Map.class);
         if(map.get("itemsList").toString().equals("[]")) {
